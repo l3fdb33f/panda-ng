@@ -115,5 +115,22 @@ def handle_python(arch, total, plugin_dir):
 		of.write(total)
 	mod = f"pandare2.autogen._pandare_ffi_{arch}_softmmu"
 	ffibuilder.set_source(mod, None)
+	# Newer cffi/pycparser no longer pre-register the stdint fixed-width types,
+	# so the extracted header's bare `typedef uint64_t hwaddr;` fails to parse.
+	# Inject the primitive typedefs up front (override=True tolerates any later
+	# redefinition). These match the LP64 x86_64 host ABI.
+	stdint_preamble = (
+		"typedef signed char int8_t;\n"
+		"typedef short int16_t;\n"
+		"typedef int int32_t;\n"
+		"typedef long long int64_t;\n"
+		"typedef unsigned char uint8_t;\n"
+		"typedef unsigned short uint16_t;\n"
+		"typedef unsigned int uint32_t;\n"
+		"typedef unsigned long long uint64_t;\n"
+		"typedef long intptr_t;\n"
+		"typedef unsigned long uintptr_t;\n"
+	)
+	total = stdint_preamble + total
 	ffibuilder.cdef(total, override=True)
 	ffibuilder.compile(debug=True)

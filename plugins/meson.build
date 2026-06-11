@@ -125,16 +125,21 @@ foreach plugin: plugin_list
                 target_link_args = ['-Lpanda-'+target]
 
                 filtered_sources = []
+                have_main = false
                 foreach f: sources
                     fpath = f.full_path()
                     if fpath.endswith(plugin + '.c') or fpath.endswith(plugin + '.cpp')
                         main_src = f
+                        have_main = true
                     else
                         filtered_sources += f
                     endif
                 endforeach
 
-                if filtered_sources.length() == 0
+                # When no source matches the <plugin>.c/.cpp naming convention
+                # (e.g. osi's main lives in os_intro.c), there is no separate
+                # main object: build every source into one PLUGIN_MAIN library.
+                if filtered_sources.length() == 0 or not have_main
                     shared_library('panda-@0@_@1@'.format(plugin, target),
                         sources,
                         c_args: c_args + target_c_args + plugin_cflags,
