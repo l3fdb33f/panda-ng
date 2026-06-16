@@ -21,11 +21,16 @@ void uninit_plugin(void *);
 #define KBASE              0xffffff8000000000ULL
 /* dSYM static symbol addresses (from the ISF) */
 #define SYM_ALLPROC        0xffffff8000e93770ULL
+#define SYM_CPU_DATA_PTR   0xffffff8000c60000ULL  /* cpu_data_t *cpu_data_ptr[] */
 /* struct proc field offsets (validated against the live kernel) */
 #define OFF_P_LIST_NEXT    0     /* proc.p_list.le_next */
 #define OFF_P_TASK         16    /* proc.task           */
 #define OFF_P_PPID         40    /* proc.p_ppid         */
 #define OFF_P_PID          104   /* proc.p_pid          */
+/* current-process chain: cpu_data -> thread -> task -> proc */
+#define OFF_CD_ACTIVE_THREAD 16   /* cpu_data.cpu_active_thread */
+#define OFF_THREAD_T_TASK    1584 /* thread.t_task              */
+#define OFF_TASK_BSD_INFO    928  /* task.bsd_info (the proc)   */
 #define NAME_WIN_OFF       1020  /* window covering p_comm(~+1029)/p_name(~+1046) */
 #define NAME_WIN_LEN       64
 #define MAX_PROCS          4096
@@ -44,6 +49,7 @@ static const struct seg dsym_segs[] = {
 static bool     resolved = false;
 static uint64_t kc_seg_rt[N_DSYM_SEGS]; /* runtime base of each dsym_segs entry */
 static uint64_t allproc_rt = 0;
+static uint64_t cpu_data_ptr_rt = 0;
 
 /* ---- memory helpers ---- */
 static inline bool rd(CPUState *cpu, uint64_t va, void *buf, int len) {
@@ -56,6 +62,7 @@ static inline uint32_t rdw(CPUState *cpu, uint64_t va) {
     uint32_t v = 0; rd(cpu, va, &v, 4); return v;
 }
 static inline bool is_kptr(uint64_t v) { return v >= KBASE; }
+static uint64_t rebase(uint64_t static_addr);
 
 /* Locate the live kernelcache Mach-O header (magic feedfacf, filetype 0xc). */
 static uint64_t find_kc_header(CPUState *cpu) {
@@ -94,20 +101,38 @@ static bool resolve(CPUState *cpu) {
         }
         off += cmdsize;
     }
-    /* rebase allproc (in dSYM __DATA) */
-    for (size_t s = 0; s < N_DSYM_SEGS; s++) {
-        if (SYM_ALLPROC >= dsym_segs[s].base &&
-            SYM_ALLPROC <  dsym_segs[s].base + dsym_segs[s].size) {
-            if (!kc_seg_rt[s]) return false;
-            allproc_rt = SYM_ALLPROC - dsym_segs[s].base + kc_seg_rt[s];
-            break;
-        }
-    }
+    allproc_rt      = rebase(SYM_ALLPROC);
+    cpu_data_ptr_rt = rebase(SYM_CPU_DATA_PTR);
     if (!allproc_rt) return false;
     resolved = true;
-    printf("osi_mac: resolved KC @ 0x%llx, allproc @ 0x%llx\n",
-           (unsigned long long)kc, (unsigned long long)allproc_rt);
+    printf("osi_mac: resolved KC @ 0x%llx, allproc @ 0x%llx, cpu_data_ptr @ 0x%llx\n",
+           (unsigned long long)kc, (unsigned long long)allproc_rt,
+           (unsigned long long)cpu_data_ptr_rt);
     return true;
+}
+
+/* Map a dSYM-static kernel symbol to its runtime address (per-segment). */
+static uint64_t rebase(uint64_t static_addr) {
+    for (size_t s = 0; s < N_DSYM_SEGS; s++) {
+        if (static_addr >= dsym_segs[s].base &&
+            static_addr <  dsym_segs[s].base + dsym_segs[s].size && kc_seg_rt[s])
+            return static_addr - dsym_segs[s].base + kc_seg_rt[s];
+    }
+    return 0;
+}
+
+/* The proc of the process currently running on this CPU (cpu_data_ptr[0] ->
+ * cpu_active_thread -> t_task -> bsd_info). Single-core (RR) -> cpu index 0. */
+static uint64_t current_proc(CPUState *cpu) {
+    if (!cpu_data_ptr_rt) return 0;
+    uint64_t cd = rdq(cpu, cpu_data_ptr_rt);          /* cpu_data_ptr[0] */
+    if (!is_kptr(cd)) return 0;
+    uint64_t thr = rdq(cpu, cd + OFF_CD_ACTIVE_THREAD);
+    if (!is_kptr(thr)) return 0;
+    uint64_t task = rdq(cpu, thr + OFF_THREAD_T_TASK);
+    if (!is_kptr(task)) return 0;
+    uint64_t proc = rdq(cpu, task + OFF_TASK_BSD_INFO);
+    return is_kptr(proc) ? proc : 0;
 }
 
 /* Extract a process name from the p_comm/p_name window: longest printable run. */
@@ -135,7 +160,7 @@ static char *read_proc_name(CPUState *cpu, uint64_t proc) {
 /* Walk allproc into an array of (proc-ptr). Caller iterates. */
 static void fill_proc(CPUState *cpu, uint64_t proc, OsiProc *p) {
     memset(p, 0, sizeof(*p));
-    p->taskd = rdq(cpu, proc + OFF_P_TASK);
+    p->taskd = proc;   /* handle == the BSD proc kernel address */
     p->pid   = (target_pid_t) rdw(cpu, proc + OFF_P_PID);
     p->ppid  = (target_pid_t) rdw(cpu, proc + OFF_P_PPID);
     p->name  = read_proc_name(cpu, proc);
@@ -175,7 +200,7 @@ void on_get_process_handles(CPUState *cpu, GArray **out) {
     while (is_kptr(p) && n < MAX_PROCS) {
         OsiProcHandle h;
         memset(&h, 0, sizeof(h));
-        h.taskd = rdq(cpu, p + OFF_P_TASK);
+        h.taskd = p;   /* the BSD proc kernel address */
         h.asid = 0;
         g_array_append_val(*out, h);
         uint64_t next = rdq(cpu, p + OFF_P_LIST_NEXT);
@@ -185,10 +210,48 @@ void on_get_process_handles(CPUState *cpu, GArray **out) {
     }
 }
 
+void on_get_current_process(CPUState *cpu, OsiProc **out) {
+    if (!resolve(cpu)) return;
+    uint64_t proc = current_proc(cpu);
+    if (!proc) return;
+    *out = (OsiProc *)g_malloc0(sizeof(OsiProc));
+    fill_proc(cpu, proc, *out);
+}
+
+void on_get_current_process_handle(CPUState *cpu, OsiProcHandle **out) {
+    if (!resolve(cpu)) return;
+    uint64_t proc = current_proc(cpu);
+    if (!proc) return;
+    *out = (OsiProcHandle *)g_malloc0(sizeof(OsiProcHandle));
+    (*out)->taskd = proc;
+    (*out)->asid = 0;
+}
+
+void on_get_process(CPUState *cpu, const OsiProcHandle *h, OsiProc **out) {
+    if (!resolve(cpu) || h == NULL || !is_kptr(h->taskd)) return;
+    *out = (OsiProc *)g_malloc0(sizeof(OsiProc));
+    fill_proc(cpu, h->taskd, *out);
+}
+
+void on_get_process_pid(CPUState *cpu, const OsiProcHandle *h, target_pid_t *pid) {
+    if (!resolve(cpu) || h == NULL || !is_kptr(h->taskd)) { *pid = (target_pid_t)-1; return; }
+    *pid = (target_pid_t) rdw(cpu, h->taskd + OFF_P_PID);
+}
+
+void on_get_process_ppid(CPUState *cpu, const OsiProcHandle *h, target_pid_t *ppid) {
+    if (!resolve(cpu) || h == NULL || !is_kptr(h->taskd)) { *ppid = (target_pid_t)-1; return; }
+    *ppid = (target_pid_t) rdw(cpu, h->taskd + OFF_P_PPID);
+}
+
 bool init_plugin(void *self) {
     panda_require("osi");
     PPP_REG_CB("osi", on_get_processes, on_get_processes);
     PPP_REG_CB("osi", on_get_process_handles, on_get_process_handles);
+    PPP_REG_CB("osi", on_get_current_process, on_get_current_process);
+    PPP_REG_CB("osi", on_get_current_process_handle, on_get_current_process_handle);
+    PPP_REG_CB("osi", on_get_process, on_get_process);
+    PPP_REG_CB("osi", on_get_process_pid, on_get_process_pid);
+    PPP_REG_CB("osi", on_get_process_ppid, on_get_process_ppid);
     printf("osi_mac: initialized (XNU/Monterey provider)\n");
     return true;
 }
