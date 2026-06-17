@@ -30,7 +30,18 @@ void uninit_plugin(void *);
 /* current-process chain: cpu_data -> thread -> task -> proc */
 #define OFF_CD_ACTIVE_THREAD 16   /* cpu_data.cpu_active_thread */
 #define OFF_THREAD_T_TASK    1584 /* thread.t_task              */
+#define OFF_THREAD_ID        1784 /* thread.thread_id (tid)     */
 #define OFF_TASK_BSD_INFO    928  /* task.bsd_info (the proc)   */
+/* address space: proc -> task.map -> vm_map.pmap -> pmap.pm_cr3 */
+#define OFF_TASK_MAP         40   /* task.map (vm_map *)        */
+#define OFF_VMMAP_PMAP       64   /* _vm_map.pmap               */
+#define OFF_PMAP_CR3         64   /* pmap.pm_cr3                */
+/* kexts: kmod global -> kmod_info linked list */
+#define SYM_KMOD             0xffffff8000e28848ULL
+#define OFF_KMOD_NEXT        0
+#define OFF_KMOD_NAME        16   /* char name[64] */
+#define OFF_KMOD_ADDR        156  /* vm_address_t  */
+#define OFF_KMOD_SIZE        164  /* vm_size_t     */
 #define NAME_WIN_OFF       1020  /* window covering p_comm(~+1029)/p_name(~+1046) */
 #define NAME_WIN_LEN       64
 #define MAX_PROCS          4096
@@ -50,6 +61,7 @@ static bool     resolved = false;
 static uint64_t kc_seg_rt[N_DSYM_SEGS]; /* runtime base of each dsym_segs entry */
 static uint64_t allproc_rt = 0;
 static uint64_t cpu_data_ptr_rt = 0;
+static uint64_t kc_header_rt = 0;   /* live kernelcache Mach-O header */
 
 /* ---- memory helpers ---- */
 static inline bool rd(CPUState *cpu, uint64_t va, void *buf, int len) {
@@ -101,6 +113,7 @@ static bool resolve(CPUState *cpu) {
         }
         off += cmdsize;
     }
+    kc_header_rt    = kc;
     allproc_rt      = rebase(SYM_ALLPROC);
     cpu_data_ptr_rt = rebase(SYM_CPU_DATA_PTR);
     if (!allproc_rt) return false;
@@ -164,8 +177,17 @@ static void fill_proc(CPUState *cpu, uint64_t proc, OsiProc *p) {
     p->pid   = (target_pid_t) rdw(cpu, proc + OFF_P_PID);
     p->ppid  = (target_pid_t) rdw(cpu, proc + OFF_P_PPID);
     p->name  = read_proc_name(cpu, proc);
-    p->asid  = 0;   /* TODO: proc->task->map->pmap->pm_cr3 */
-    p->pgd   = 0;
+    /* address space: proc -> task -> vm_map -> pmap -> pm_cr3 */
+    uint64_t cr3 = 0, task = rdq(cpu, proc + OFF_P_TASK);
+    if (is_kptr(task)) {
+        uint64_t map = rdq(cpu, task + OFF_TASK_MAP);
+        if (is_kptr(map)) {
+            uint64_t pmap = rdq(cpu, map + OFF_VMMAP_PMAP);
+            if (is_kptr(pmap)) cr3 = rdq(cpu, pmap + OFF_PMAP_CR3);
+        }
+    }
+    p->asid = cr3;
+    p->pgd  = cr3;
     p->create_time = 0;
 }
 
@@ -243,6 +265,54 @@ void on_get_process_ppid(CPUState *cpu, const OsiProcHandle *h, target_pid_t *pp
     *ppid = (target_pid_t) rdw(cpu, h->taskd + OFF_P_PPID);
 }
 
+void on_get_current_thread(CPUState *cpu, OsiThread **out) {
+    if (!resolve(cpu)) return;
+    uint64_t cd = rdq(cpu, cpu_data_ptr_rt);
+    if (!is_kptr(cd)) return;
+    uint64_t thr = rdq(cpu, cd + OFF_CD_ACTIVE_THREAD);
+    if (!is_kptr(thr)) return;
+    uint64_t task = rdq(cpu, thr + OFF_THREAD_T_TASK);
+    uint64_t proc = is_kptr(task) ? rdq(cpu, task + OFF_TASK_BSD_INFO) : 0;
+    *out = (OsiThread *)g_malloc0(sizeof(OsiThread));
+    (*out)->tid = (target_pid_t) rdq(cpu, thr + OFF_THREAD_ID);
+    (*out)->pid = is_kptr(proc) ? (target_pid_t) rdw(cpu, proc + OFF_P_PID) : (target_pid_t)-1;
+}
+
+/* Kernel extensions. On Monterey the kexts are prelinked into the boot
+ * kernelcache, so the legacy kmod_info list (`kmod`) is empty; instead each
+ * kext is an LC_FILESET_ENTRY in the KC Mach-O header (bundle-id + load addr).
+ */
+#define LC_FILESET_ENTRY 0x35   /* matched modulo LC_REQ_DYLD */
+void on_get_modules(CPUState *cpu, GArray **out) {
+    if (!resolve(cpu) || !kc_header_rt) return;
+    if (*out == NULL) {
+        *out = g_array_new(false, false, sizeof(OsiModule));
+        g_array_set_clear_func(*out, (GDestroyNotify)free_osimodule_contents);
+    }
+    uint32_t ncmds = rdw(cpu, kc_header_rt + 16);
+    uint64_t off = kc_header_rt + 32;
+    for (uint32_t i = 0; i < ncmds && i < 8192; i++) {
+        uint32_t cmd = rdw(cpu, off), cmdsize = rdw(cpu, off + 4);
+        if (cmdsize == 0) break;
+        if ((cmd & 0x7fffffff) == LC_FILESET_ENTRY) {
+            OsiModule m;
+            memset(&m, 0, sizeof(m));
+            uint64_t vmaddr = rdq(cpu, off + 8);
+            uint32_t str_off = rdw(cpu, off + 24);   /* entry_id (lc_str) */
+            char nm[160] = {0};
+            if (str_off < cmdsize)
+                rd(cpu, off + str_off, nm, sizeof(nm) - 1);
+            m.modd = off;
+            m.base = vmaddr;
+            m.size = 0;   /* not directly in the fileset entry */
+            m.name = g_strdup(nm);
+            m.file = g_strdup(nm);
+            g_array_append_val(*out, m);
+        }
+        off += cmdsize;
+    }
+}
+
 bool init_plugin(void *self) {
     panda_require("osi");
     PPP_REG_CB("osi", on_get_processes, on_get_processes);
@@ -252,6 +322,8 @@ bool init_plugin(void *self) {
     PPP_REG_CB("osi", on_get_process, on_get_process);
     PPP_REG_CB("osi", on_get_process_pid, on_get_process_pid);
     PPP_REG_CB("osi", on_get_process_ppid, on_get_process_ppid);
+    PPP_REG_CB("osi", on_get_current_thread, on_get_current_thread);
+    PPP_REG_CB("osi", on_get_modules, on_get_modules);
     printf("osi_mac: initialized (XNU/Monterey provider)\n");
     return true;
 }

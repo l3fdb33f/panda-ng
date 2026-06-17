@@ -1854,6 +1854,40 @@ class Panda():
             return None
         return proc
 
+    def get_current_thread(self, cpu):
+        '''
+        Get the currently-scheduled thread as an OsiThread struct.
+
+        Requires: OSI
+
+        Args:
+            cpu: CPUState struct
+
+        Returns:
+            OsiThread: the current thread (with .pid and .tid), or None on failure
+        '''
+        thread = self.plugins['osi'].get_current_thread(cpu)
+        if thread == self.ffi.NULL:
+            return None
+        return thread
+
+    def get_modules(self, cpu):
+        '''
+        Get the kernel modules loaded by the guest OS (kernel extensions on
+        macOS, kernel modules on Linux).
+
+        Requires: OSI
+
+        Args:
+            cpu: CPUState struct
+
+        Returns:
+            pandare.utils.GArrayIterator: iterator of OsiModule structures
+        '''
+        modules = self.plugins['osi'].get_modules(cpu)
+        modules_len = self.garray_len(modules)
+        return GArrayIterator(self.plugins['osi'].get_one_module, modules, modules_len, self.plugins['osi'].cleanup_garray)
+
     def get_mappings(self, cpu):
         '''
         Get all active memory mappings in the system.
