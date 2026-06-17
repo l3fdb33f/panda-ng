@@ -21,6 +21,7 @@ void uninit_plugin(void *);
 #define KBASE              0xffffff8000000000ULL
 /* dSYM static symbol addresses (from the ISF) */
 #define SYM_ALLPROC        0xffffff8000e93770ULL
+#define SYM_KERNPROC       0xffffff8000f03a38ULL  /* in __DATA_CONST */
 #define SYM_CPU_DATA_PTR   0xffffff8000c60000ULL  /* cpu_data_t *cpu_data_ptr[] */
 /* struct proc field offsets (validated against the live kernel) */
 #define OFF_P_LIST_NEXT    0     /* proc.p_list.le_next */
@@ -36,12 +37,13 @@ void uninit_plugin(void *);
 #define OFF_TASK_MAP         40   /* task.map (vm_map *)        */
 #define OFF_VMMAP_PMAP       64   /* _vm_map.pmap               */
 #define OFF_PMAP_CR3         64   /* pmap.pm_cr3                */
-/* kexts: kmod global -> kmod_info linked list */
-#define SYM_KMOD             0xffffff8000e28848ULL
-#define OFF_KMOD_NEXT        0
-#define OFF_KMOD_NAME        16   /* char name[64] */
-#define OFF_KMOD_ADDR        156  /* vm_address_t  */
-#define OFF_KMOD_SIZE        164  /* vm_size_t     */
+/* vm_map region walk (on_get_mappings) */
+#define OFF_VMMAP_HDR        16   /* _vm_map.hdr (vm_map_header) */
+#define OFF_VMMAPHDR_LINKS   0    /* vm_map_header.links (vm_map_links) */
+#define OFF_VMMAPHDR_NENTRIES 32  /* vm_map_header.nentries */
+#define OFF_LINKS_NEXT       8    /* vm_map_links.next  */
+#define OFF_LINKS_START      16   /* vm_map_links.start */
+#define OFF_LINKS_END        24   /* vm_map_links.end   */
 #define NAME_WIN_OFF       1020  /* window covering p_comm(~+1029)/p_name(~+1046) */
 #define NAME_WIN_LEN       64
 #define MAX_PROCS          4096
@@ -60,6 +62,7 @@ static const struct seg dsym_segs[] = {
 static bool     resolved = false;
 static uint64_t kc_seg_rt[N_DSYM_SEGS]; /* runtime base of each dsym_segs entry */
 static uint64_t allproc_rt = 0;
+static uint64_t kernproc_rt = 0;
 static uint64_t cpu_data_ptr_rt = 0;
 static uint64_t kc_header_rt = 0;   /* live kernelcache Mach-O header */
 
@@ -90,15 +93,13 @@ static uint64_t find_kc_header(CPUState *cpu) {
     return 0;
 }
 
-/* Parse KC LC_SEGMENT_64 runtime bases and rebase allproc. Runs once. */
-static bool resolve(CPUState *cpu) {
-    if (resolved) return true;
-    if (!panda_in_kernel(cpu)) return false;   /* need kernel CR3 for kernel VAs */
-    uint64_t kc = find_kc_header(cpu);
-    if (!kc) return false;
-    uint32_t ncmds = rdw(cpu, kc + 16);
-    if (ncmds == 0 || ncmds > 4096) return false;
-    uint64_t off = kc + 32;
+#define LC_FILESET_ENTRY 0x35   /* matched modulo LC_REQ_DYLD */
+
+/* Fill kc_seg_rt from a Mach-O header's LC_SEGMENT_64 commands. */
+static void parse_segments(CPUState *cpu, uint64_t mh) {
+    uint32_t ncmds = rdw(cpu, mh + 16);
+    if (ncmds == 0 || ncmds > 8192) return;
+    uint64_t off = mh + 32;
     for (uint32_t i = 0; i < ncmds; i++) {
         uint32_t cmd = rdw(cpu, off), cmdsize = rdw(cpu, off + 4);
         if (cmdsize == 0) break;
@@ -106,20 +107,55 @@ static bool resolve(CPUState *cpu) {
             char nm[17] = {0};
             rd(cpu, off + 8, nm, 16);
             uint64_t vmaddr = rdq(cpu, off + 24);
-            for (size_t s = 0; s < N_DSYM_SEGS; s++) {
+            for (size_t s = 0; s < N_DSYM_SEGS; s++)
                 if (strncmp(nm, dsym_segs[s].name, 16) == 0)
                     kc_seg_rt[s] = vmaddr;
-            }
         }
         off += cmdsize;
     }
-    kc_header_rt    = kc;
+}
+
+/* Find the kernel's own Mach-O header inside the KC: the com.apple.kernel
+ * LC_FILESET_ENTRY's vmaddr. The kernelcache relinks each fileset entry at its
+ * own segment bases, so rebasing must use the KERNEL entry's segments (the
+ * top-level KC __DATA_CONST etc. merge kext data and don't map kernel symbols). */
+static uint64_t find_kernel_macho(CPUState *cpu, uint64_t kc) {
+    uint32_t ncmds = rdw(cpu, kc + 16);
+    uint64_t off = kc + 32;
+    for (uint32_t i = 0; i < ncmds && i < 8192; i++) {
+        uint32_t cmd = rdw(cpu, off), cmdsize = rdw(cpu, off + 4);
+        if (cmdsize == 0) break;
+        if ((cmd & 0x7fffffff) == LC_FILESET_ENTRY) {
+            uint32_t str_off = rdw(cpu, off + 24);
+            char nm[64] = {0};
+            if (str_off < cmdsize) rd(cpu, off + str_off, nm, sizeof(nm) - 1);
+            if (strcmp(nm, "com.apple.kernel") == 0)
+                return rdq(cpu, off + 8);  /* vmaddr of the kernel mach_header */
+        }
+        off += cmdsize;
+    }
+    return 0;
+}
+
+/* Locate the KC, derive the kernel's runtime segment bases, and rebase. Once. */
+static bool resolve(CPUState *cpu) {
+    if (resolved) return true;
+    if (!panda_in_kernel(cpu)) return false;   /* need kernel CR3 for kernel VAs */
+    uint64_t kc = find_kc_header(cpu);
+    if (!kc) return false;
+    kc_header_rt = kc;
+    uint64_t kernel_mh = find_kernel_macho(cpu, kc);
+    /* prefer the kernel fileset entry's segments; fall back to the KC's own */
+    parse_segments(cpu, kernel_mh ? kernel_mh : kc);
     allproc_rt      = rebase(SYM_ALLPROC);
+    kernproc_rt     = rebase(SYM_KERNPROC);
     cpu_data_ptr_rt = rebase(SYM_CPU_DATA_PTR);
     if (!allproc_rt) return false;
     resolved = true;
-    printf("osi_mac: resolved KC @ 0x%llx, allproc @ 0x%llx, cpu_data_ptr @ 0x%llx\n",
-           (unsigned long long)kc, (unsigned long long)allproc_rt,
+    printf("osi_mac: resolved KC @ 0x%llx (kernel_mh 0x%llx), allproc @ 0x%llx, "
+           "kernproc @ 0x%llx, cpu_data_ptr @ 0x%llx\n",
+           (unsigned long long)kc, (unsigned long long)kernel_mh,
+           (unsigned long long)allproc_rt, (unsigned long long)kernproc_rt,
            (unsigned long long)cpu_data_ptr_rt);
     return true;
 }
@@ -282,7 +318,6 @@ void on_get_current_thread(CPUState *cpu, OsiThread **out) {
  * kernelcache, so the legacy kmod_info list (`kmod`) is empty; instead each
  * kext is an LC_FILESET_ENTRY in the KC Mach-O header (bundle-id + load addr).
  */
-#define LC_FILESET_ENTRY 0x35   /* matched modulo LC_REQ_DYLD */
 void on_get_modules(CPUState *cpu, GArray **out) {
     if (!resolve(cpu) || !kc_header_rt) return;
     if (*out == NULL) {
@@ -313,6 +348,40 @@ void on_get_modules(CPUState *cpu, GArray **out) {
     }
 }
 
+/* Memory regions of a process: walk the vm_map_entry list (circular, sentinel
+ * = the embedded vm_map_header.links). Returns OsiModule per region with
+ * base/size; backing-file names are not resolved yet (TODO: vm_object->pager
+ * ->vnode->path). p->taskd is the BSD proc kernel address. */
+void on_get_mappings(CPUState *cpu, OsiProc *p, GArray **out) {
+    if (!resolve(cpu) || p == NULL || !is_kptr(p->taskd)) return;
+    uint64_t task = rdq(cpu, p->taskd + OFF_P_TASK);
+    if (!is_kptr(task)) return;
+    uint64_t map = rdq(cpu, task + OFF_TASK_MAP);
+    if (!is_kptr(map)) return;
+    if (*out == NULL) {
+        *out = g_array_new(false, false, sizeof(OsiModule));
+        g_array_set_clear_func(*out, (GDestroyNotify)free_osimodule_contents);
+    }
+    uint64_t sentinel = map + OFF_VMMAP_HDR + OFF_VMMAPHDR_LINKS;
+    uint32_t nent = rdw(cpu, map + OFF_VMMAP_HDR + OFF_VMMAPHDR_NENTRIES);
+    uint64_t e = rdq(cpu, sentinel + OFF_LINKS_NEXT);
+    int n = 0;
+    while (is_kptr(e) && e != sentinel && n <= (int)nent && n < 8192) {
+        OsiModule m;
+        memset(&m, 0, sizeof(m));
+        uint64_t start = rdq(cpu, e + OFF_LINKS_START);
+        uint64_t end   = rdq(cpu, e + OFF_LINKS_END);
+        m.modd = e;
+        m.base = start;
+        m.size = (end > start) ? (end - start) : 0;
+        m.name = g_strdup("");
+        m.file = g_strdup("");
+        g_array_append_val(*out, m);
+        e = rdq(cpu, e + OFF_LINKS_NEXT);
+        n++;
+    }
+}
+
 bool init_plugin(void *self) {
     panda_require("osi");
     PPP_REG_CB("osi", on_get_processes, on_get_processes);
@@ -324,6 +393,7 @@ bool init_plugin(void *self) {
     PPP_REG_CB("osi", on_get_process_ppid, on_get_process_ppid);
     PPP_REG_CB("osi", on_get_current_thread, on_get_current_thread);
     PPP_REG_CB("osi", on_get_modules, on_get_modules);
+    PPP_REG_CB("osi", on_get_mappings, on_get_mappings);
     printf("osi_mac: initialized (XNU/Monterey provider)\n");
     return true;
 }
