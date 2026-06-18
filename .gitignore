@@ -266,3 +266,6 @@ local_packages/
 
 # ignore auto-generated pypanda build artifacts
 python/core/pandare2/autogen/
+
+# macOS arm64 native build dir (PANDBox port)
+build-mac/

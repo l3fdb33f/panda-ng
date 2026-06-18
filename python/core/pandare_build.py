@@ -77,7 +77,31 @@ def copy_ppp_header(filepath):
 			new_contents.append(line.strip())
 	return "\n".join(new_contents)
 
+# Newer cffi/pycparser no longer pre-register the fixed-width <stdint.h> types,
+# so ffibuilder.cdef() fails on the first `typedef uint64_t hwaddr;`. The headers
+# are also generated against Linux glibc, which leaks a couple of internal
+# typedefs (__dev_t from <sys/sysmacros.h>, __poll_t). Declare all of these up
+# front so the cdef parses on any host (incl. macOS, where libc lacks them).
+_CFFI_TYPE_PRELUDE = """
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long long uint64_t;
+typedef signed char int8_t;
+typedef short int16_t;
+typedef int int32_t;
+typedef long long int64_t;
+typedef unsigned long uintptr_t;
+typedef long intptr_t;
+typedef unsigned long size_t;
+typedef long ssize_t;
+typedef long ptrdiff_t;
+typedef unsigned long __dev_t;
+typedef unsigned int __poll_t;
+"""
+
 def handle_python(arch, total, plugin_dir):
+	total = _CFFI_TYPE_PRELUDE + total
 	syscalls2_lookup = {
 		"i386": "syscalls_ext_typedefs_x86.h",
 		"x86_64": "syscalls_ext_typedefs_x64.h",
