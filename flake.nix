@@ -7,7 +7,7 @@
       flake = false;
     };
     libpanda-ng-src = {
-      url = "github:panda-re/libpanda-ng";
+      url = "github:l3fdb33f/libpanda-ng";
       flake = false;
     };
   };
