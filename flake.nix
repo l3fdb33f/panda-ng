@@ -3,7 +3,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
     panda-qemu-src = {
-      url = "github:panda-re/qemu?ref=wrapup-rebase";
+      url = "github:l3fdb33f/qemu?ref=wip/record-replay";
       flake = false;
     };
     libpanda-ng-src = {

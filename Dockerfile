@@ -2,7 +2,7 @@
 ARG REGISTRY="docker.io"
 ARG BASE_IMAGE="ubuntu:22.04"
 ARG TARGET_LIST="x86_64-softmmu,i386-softmmu,arm-softmmu,aarch64-softmmu,mips-softmmu,mipsel-softmmu,mips64-softmmu,mips64el-softmmu"
-ARG PANDA_VERSION="pandav0.0.49"
+ARG PANDA_VERSION="fork_dev_1"
 
 ### BASE IMAGE
 FROM ${REGISTRY}/$BASE_IMAGE AS base
@@ -25,7 +25,7 @@ RUN pip3 install meson pycparser
 
 ARG PANDA_VERSION
 RUN wget -O /tmp/pandare.deb \
-    https://github.com/panda-re/qemu/releases/download/${PANDA_VERSION}/pandare_22.04.deb && \
+    https://github.com/l3fdb33f/qemu/releases/download/${PANDA_VERSION}/pandare_22.04.deb && \
     apt-get -qq update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yy --fix-missing -f /tmp/pandare.deb && \
     rm -rf /var/lib/apt/lists/*
