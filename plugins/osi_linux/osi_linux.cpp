@@ -318,14 +318,15 @@ void fill_osithread(CPUState *env, OsiThread *t,
 
 void on_first_syscall(CPUState *cpu, target_ulong pc, target_ulong callno) {
     // Make sure we can now read current. Note this isn't like all the other on_...
-    // functions that are registered as OSI callbacks
-    /*
+    // functions that are registered as OSI callbacks.
+    // Retry on subsequent syscalls until the current task struct is readable
+    // (e.g. during early cold boot, before the per-cpu base / current_task page
+    // is mapped) rather than asserting and aborting the whole emulator. This
+    // callback stays registered (on_all_sys_enter) and removes itself once init
+    // succeeds, so an un-primed cold boot converges instead of crashing.
     if (can_read_current(cpu) == false) {
-      printf("Failed to read at first syscall. Retrying...\n");
       return;
     }
-    */
-    assert(can_read_current(cpu) && "Couldn't find current task struct at first syscall");
     if (!osi_initialized)
       LOG_INFO(PLUGIN_NAME " initialization complete.");
     osi_initialized=true;
