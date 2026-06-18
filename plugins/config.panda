@@ -1,11 +1,6 @@
-cskeleton
-cppskeleton
-hooks
 hw_proc_id
-hypercaller
-hypersyscalls
+hooks
 osi
 osi_linux
 proc_start_linux
-rust_skeleton
 syscalls2
