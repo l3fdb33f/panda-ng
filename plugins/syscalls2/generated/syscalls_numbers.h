@@ -12273,6 +12273,2677 @@ namespace syscalls2 {
 			
 		}
 	}
+	// windows_10:x64
+	namespace windows_10 {
+		namespace x64 {
+			
+			const int NtAccessCheck = 0;
+			
+			
+			const int NtWorkerFactoryWorkerReady = 1;
+			
+			
+			const int NtAcceptConnectPort = 2;
+			
+			
+			const int NtMapUserPhysicalPagesScatter = 3;
+			
+			
+			const int NtWaitForSingleObject = 4;
+			
+			
+			const int NtCallbackReturn = 5;
+			
+			
+			const int NtReadFile = 6;
+			
+			
+			const int NtDeviceIoControlFile = 7;
+			
+			
+			const int NtWriteFile = 8;
+			
+			
+			const int NtRemoveIoCompletion = 9;
+			
+			
+			const int NtReleaseSemaphore = 10;
+			
+			
+			const int NtReplyWaitReceivePort = 11;
+			
+			
+			const int NtReplyPort = 12;
+			
+			
+			const int NtSetInformationThread = 13;
+			
+			
+			const int NtSetEvent = 14;
+			
+			
+			const int NtClose = 15;
+			
+			
+			const int NtQueryObject = 16;
+			
+			
+			const int NtQueryInformationFile = 17;
+			
+			
+			const int NtOpenKey = 18;
+			
+			
+			const int NtEnumerateValueKey = 19;
+			
+			
+			const int NtFindAtom = 20;
+			
+			
+			const int NtQueryDefaultLocale = 21;
+			
+			
+			const int NtQueryKey = 22;
+			
+			
+			const int NtQueryValueKey = 23;
+			
+			
+			const int NtAllocateVirtualMemory = 24;
+			
+			
+			const int NtQueryInformationProcess = 25;
+			
+			
+			const int NtWaitForMultipleObjects32 = 26;
+			
+			
+			const int NtWriteFileGather = 27;
+			
+			
+			const int NtSetInformationProcess = 28;
+			
+			
+			const int NtCreateKey = 29;
+			
+			
+			const int NtFreeVirtualMemory = 30;
+			
+			
+			const int NtImpersonateClientOfPort = 31;
+			
+			
+			const int NtReleaseMutant = 32;
+			
+			
+			const int NtQueryInformationToken = 33;
+			
+			
+			const int NtRequestWaitReplyPort = 34;
+			
+			
+			const int NtQueryVirtualMemory = 35;
+			
+			
+			const int NtOpenThreadToken = 36;
+			
+			
+			const int NtQueryInformationThread = 37;
+			
+			
+			const int NtOpenProcess = 38;
+			
+			
+			const int NtSetInformationFile = 39;
+			
+			
+			const int NtMapViewOfSection = 40;
+			
+			
+			const int NtAccessCheckAndAuditAlarm = 41;
+			
+			
+			const int NtUnmapViewOfSection = 42;
+			
+			
+			const int NtReplyWaitReceivePortEx = 43;
+			
+			
+			const int NtTerminateProcess = 44;
+			
+			
+			const int NtSetEventBoostPriority = 45;
+			
+			
+			const int NtReadFileScatter = 46;
+			
+			
+			const int NtOpenThreadTokenEx = 47;
+			
+			
+			const int NtOpenProcessTokenEx = 48;
+			
+			
+			const int NtQueryPerformanceCounter = 49;
+			
+			
+			const int NtEnumerateKey = 50;
+			
+			
+			const int NtOpenFile = 51;
+			
+			
+			const int NtDelayExecution = 52;
+			
+			
+			const int NtQueryDirectoryFile = 53;
+			
+			
+			const int NtQuerySystemInformation = 54;
+			
+			
+			const int NtOpenSection = 55;
+			
+			
+			const int NtQueryTimer = 56;
+			
+			
+			const int NtFsControlFile = 57;
+			
+			
+			const int NtWriteVirtualMemory = 58;
+			
+			
+			const int NtCloseObjectAuditAlarm = 59;
+			
+			
+			const int NtDuplicateObject = 60;
+			
+			
+			const int NtQueryAttributesFile = 61;
+			
+			
+			const int NtClearEvent = 62;
+			
+			
+			const int NtReadVirtualMemory = 63;
+			
+			
+			const int NtOpenEvent = 64;
+			
+			
+			const int NtAdjustPrivilegesToken = 65;
+			
+			
+			const int NtDuplicateToken = 66;
+			
+			
+			const int NtContinue = 67;
+			
+			
+			const int NtQueryDefaultUILanguage = 68;
+			
+			
+			const int NtQueueApcThread = 69;
+			
+			
+			const int NtYieldExecution = 70;
+			
+			
+			const int NtAddAtom = 71;
+			
+			
+			const int NtCreateEvent = 72;
+			
+			
+			const int NtQueryVolumeInformationFile = 73;
+			
+			
+			const int NtCreateSection = 74;
+			
+			
+			const int NtFlushBuffersFile = 75;
+			
+			
+			const int NtApphelpCacheControl = 76;
+			
+			
+			const int NtCreateProcessEx = 77;
+			
+			
+			const int NtCreateThread = 78;
+			
+			
+			const int NtIsProcessInJob = 79;
+			
+			
+			const int NtProtectVirtualMemory = 80;
+			
+			
+			const int NtQuerySection = 81;
+			
+			
+			const int NtResumeThread = 82;
+			
+			
+			const int NtTerminateThread = 83;
+			
+			
+			const int NtReadRequestData = 84;
+			
+			
+			const int NtCreateFile = 85;
+			
+			
+			const int NtQueryEvent = 86;
+			
+			
+			const int NtWriteRequestData = 87;
+			
+			
+			const int NtOpenDirectoryObject = 88;
+			
+			
+			const int NtAccessCheckByTypeAndAuditAlarm = 89;
+			
+			
+			const int NtWaitForMultipleObjects = 91;
+			
+			
+			const int NtSetInformationObject = 92;
+			
+			
+			const int NtCancelIoFile = 93;
+			
+			
+			const int NtTraceEvent = 94;
+			
+			
+			const int NtPowerInformation = 95;
+			
+			
+			const int NtSetValueKey = 96;
+			
+			
+			const int NtCancelTimer = 97;
+			
+			
+			const int NtSetTimer = 98;
+			
+			
+			const int NtAccessCheckByType = 99;
+			
+			
+			const int NtAccessCheckByTypeResultList = 100;
+			
+			
+			const int NtAccessCheckByTypeResultListAndAuditAlarm = 101;
+			
+			
+			const int NtAccessCheckByTypeResultListAndAuditAlarmByHandle = 102;
+			
+			
+			const int NtAddBootEntry = 106;
+			
+			
+			const int NtAddDriverEntry = 107;
+			
+			
+			const int NtAdjustGroupsToken = 108;
+			
+			
+			const int NtAlertResumeThread = 110;
+			
+			
+			const int NtAlertThread = 111;
+			
+			
+			const int NtAllocateLocallyUniqueId = 113;
+			
+			
+			const int NtAllocateReserveObject = 114;
+			
+			
+			const int NtAllocateUserPhysicalPages = 115;
+			
+			
+			const int NtAllocateUuids = 117;
+			
+			
+			const int NtAlpcAcceptConnectPort = 119;
+			
+			
+			const int NtAlpcCancelMessage = 120;
+			
+			
+			const int NtAlpcConnectPort = 121;
+			
+			
+			const int NtAlpcCreatePort = 123;
+			
+			
+			const int NtAlpcCreatePortSection = 124;
+			
+			
+			const int NtAlpcCreateResourceReserve = 125;
+			
+			
+			const int NtAlpcCreateSectionView = 126;
+			
+			
+			const int NtAlpcCreateSecurityContext = 127;
+			
+			
+			const int NtAlpcDeletePortSection = 128;
+			
+			
+			const int NtAlpcDeleteResourceReserve = 129;
+			
+			
+			const int NtAlpcDeleteSectionView = 130;
+			
+			
+			const int NtAlpcDeleteSecurityContext = 131;
+			
+			
+			const int NtAlpcDisconnectPort = 132;
+			
+			
+			const int NtAlpcImpersonateClientOfPort = 134;
+			
+			
+			const int NtAlpcOpenSenderProcess = 135;
+			
+			
+			const int NtAlpcOpenSenderThread = 136;
+			
+			
+			const int NtAlpcQueryInformation = 137;
+			
+			
+			const int NtAlpcQueryInformationMessage = 138;
+			
+			
+			const int NtAlpcRevokeSecurityContext = 139;
+			
+			
+			const int NtAlpcSendWaitReceivePort = 140;
+			
+			
+			const int NtAlpcSetInformation = 141;
+			
+			
+			const int NtAreMappedFilesTheSame = 142;
+			
+			
+			const int NtAssignProcessToJobObject = 143;
+			
+			
+			const int NtCancelIoFileEx = 146;
+			
+			
+			const int NtCancelSynchronousIoFile = 147;
+			
+			
+			const int NtCommitComplete = 150;
+			
+			
+			const int NtCommitEnlistment = 151;
+			
+			
+			const int NtCommitTransaction = 153;
+			
+			
+			const int NtCompactKeys = 154;
+			
+			
+			const int NtCompareTokens = 157;
+			
+			
+			const int NtCompleteConnectPort = 158;
+			
+			
+			const int NtCompressKey = 159;
+			
+			
+			const int NtConnectPort = 160;
+			
+			
+			const int NtCreateDebugObject = 166;
+			
+			
+			const int NtCreateDirectoryObject = 167;
+			
+			
+			const int NtCreateEnlistment = 170;
+			
+			
+			const int NtCreateEventPair = 171;
+			
+			
+			const int NtCreateIoCompletion = 173;
+			
+			
+			const int NtCreateJobObject = 174;
+			
+			
+			const int NtCreateJobSet = 175;
+			
+			
+			const int NtCreateKeyTransacted = 176;
+			
+			
+			const int NtCreateKeyedEvent = 177;
+			
+			
+			const int NtCreateMailslotFile = 179;
+			
+			
+			const int NtCreateMutant = 180;
+			
+			
+			const int NtCreateNamedPipeFile = 181;
+			
+			
+			const int NtCreatePagingFile = 182;
+			
+			
+			const int NtCreatePort = 184;
+			
+			
+			const int NtCreatePrivateNamespace = 185;
+			
+			
+			const int NtCreateProcess = 186;
+			
+			
+			const int NtCreateProfile = 187;
+			
+			
+			const int NtCreateProfileEx = 188;
+			
+			
+			const int NtCreateResourceManager = 190;
+			
+			
+			const int NtCreateSemaphore = 192;
+			
+			
+			const int NtCreateSymbolicLinkObject = 193;
+			
+			
+			const int NtCreateThreadEx = 194;
+			
+			
+			const int NtCreateTimer = 195;
+			
+			
+			const int NtCreateToken = 197;
+			
+			
+			const int NtCreateTransaction = 199;
+			
+			
+			const int NtCreateTransactionManager = 200;
+			
+			
+			const int NtCreateUserProcess = 201;
+			
+			
+			const int NtCreateWaitablePort = 203;
+			
+			
+			const int NtCreateWorkerFactory = 205;
+			
+			
+			const int NtDebugActiveProcess = 206;
+			
+			
+			const int NtDebugContinue = 207;
+			
+			
+			const int NtDeleteAtom = 208;
+			
+			
+			const int NtDeleteBootEntry = 209;
+			
+			
+			const int NtDeleteDriverEntry = 210;
+			
+			
+			const int NtDeleteFile = 211;
+			
+			
+			const int NtDeleteKey = 212;
+			
+			
+			const int NtDeleteObjectAuditAlarm = 213;
+			
+			
+			const int NtDeletePrivateNamespace = 214;
+			
+			
+			const int NtDeleteValueKey = 215;
+			
+			
+			const int NtDisableLastKnownGood = 219;
+			
+			
+			const int NtDisplayString = 220;
+			
+			
+			const int NtDrawText = 221;
+			
+			
+			const int NtEnableLastKnownGood = 222;
+			
+			
+			const int NtEnumerateBootEntries = 223;
+			
+			
+			const int NtEnumerateDriverEntries = 224;
+			
+			
+			const int NtEnumerateSystemEnvironmentValuesEx = 225;
+			
+			
+			const int NtEnumerateTransactionObject = 226;
+			
+			
+			const int NtExtendSection = 227;
+			
+			
+			const int NtFilterToken = 229;
+			
+			
+			const int NtFlushInstallUILanguage = 232;
+			
+			
+			const int NtFlushInstructionCache = 233;
+			
+			
+			const int NtFlushKey = 234;
+			
+			
+			const int NtFlushProcessWriteBuffers = 235;
+			
+			
+			const int NtFlushVirtualMemory = 236;
+			
+			
+			const int NtFlushWriteBuffer = 237;
+			
+			
+			const int NtFreeUserPhysicalPages = 238;
+			
+			
+			const int NtFreezeRegistry = 239;
+			
+			
+			const int NtFreezeTransactions = 240;
+			
+			
+			const int NtGetContextThread = 243;
+			
+			
+			const int NtGetCurrentProcessorNumber = 244;
+			
+			
+			const int NtGetDevicePowerState = 246;
+			
+			
+			const int NtGetMUIRegistryInfo = 247;
+			
+			
+			const int NtGetNextProcess = 248;
+			
+			
+			const int NtGetNextThread = 249;
+			
+			
+			const int NtGetNlsSectionPtr = 250;
+			
+			
+			const int NtGetNotificationResourceManager = 251;
+			
+			
+			const int NtGetWriteWatch = 252;
+			
+			
+			const int NtImpersonateAnonymousToken = 253;
+			
+			
+			const int NtImpersonateThread = 254;
+			
+			
+			const int NtInitializeNlsFiles = 256;
+			
+			
+			const int NtInitializeRegistry = 257;
+			
+			
+			const int NtInitiatePowerAction = 258;
+			
+			
+			const int NtIsSystemResumeAutomatic = 259;
+			
+			
+			const int NtIsUILanguageComitted = 260;
+			
+			
+			const int NtListenPort = 261;
+			
+			
+			const int NtLoadDriver = 262;
+			
+			
+			const int NtLoadKey = 264;
+			
+			
+			const int NtLoadKey2 = 265;
+			
+			
+			const int NtLoadKeyEx = 266;
+			
+			
+			const int NtLockFile = 267;
+			
+			
+			const int NtLockProductActivationKeys = 268;
+			
+			
+			const int NtLockRegistryKey = 269;
+			
+			
+			const int NtLockVirtualMemory = 270;
+			
+			
+			const int NtMakePermanentObject = 271;
+			
+			
+			const int NtMakeTemporaryObject = 272;
+			
+			
+			const int NtMapCMFModule = 275;
+			
+			
+			const int NtMapUserPhysicalPages = 276;
+			
+			
+			const int NtModifyBootEntry = 278;
+			
+			
+			const int NtModifyDriverEntry = 279;
+			
+			
+			const int NtNotifyChangeDirectoryFile = 280;
+			
+			
+			const int NtNotifyChangeKey = 282;
+			
+			
+			const int NtNotifyChangeMultipleKeys = 283;
+			
+			
+			const int NtNotifyChangeSession = 284;
+			
+			
+			const int NtOpenEnlistment = 285;
+			
+			
+			const int NtOpenEventPair = 286;
+			
+			
+			const int NtOpenIoCompletion = 287;
+			
+			
+			const int NtOpenJobObject = 288;
+			
+			
+			const int NtOpenKeyEx = 289;
+			
+			
+			const int NtOpenKeyTransacted = 290;
+			
+			
+			const int NtOpenKeyTransactedEx = 291;
+			
+			
+			const int NtOpenKeyedEvent = 292;
+			
+			
+			const int NtOpenMutant = 293;
+			
+			
+			const int NtOpenObjectAuditAlarm = 294;
+			
+			
+			const int NtOpenPrivateNamespace = 296;
+			
+			
+			const int NtOpenProcessToken = 297;
+			
+			
+			const int NtOpenResourceManager = 299;
+			
+			
+			const int NtOpenSemaphore = 300;
+			
+			
+			const int NtOpenSession = 301;
+			
+			
+			const int NtOpenSymbolicLinkObject = 302;
+			
+			
+			const int NtOpenThread = 303;
+			
+			
+			const int NtOpenTimer = 304;
+			
+			
+			const int NtOpenTransaction = 305;
+			
+			
+			const int NtOpenTransactionManager = 306;
+			
+			
+			const int NtPlugPlayControl = 307;
+			
+			
+			const int NtPrePrepareComplete = 308;
+			
+			
+			const int NtPrePrepareEnlistment = 309;
+			
+			
+			const int NtPrepareComplete = 310;
+			
+			
+			const int NtPrepareEnlistment = 311;
+			
+			
+			const int NtPrivilegeCheck = 312;
+			
+			
+			const int NtPrivilegeObjectAuditAlarm = 313;
+			
+			
+			const int NtPrivilegedServiceAuditAlarm = 314;
+			
+			
+			const int NtPropagationComplete = 315;
+			
+			
+			const int NtPropagationFailed = 316;
+			
+			
+			const int NtPulseEvent = 318;
+			
+			
+			const int NtQueryBootEntryOrder = 320;
+			
+			
+			const int NtQueryBootOptions = 321;
+			
+			
+			const int NtQueryDebugFilterState = 322;
+			
+			
+			const int NtQueryDirectoryObject = 324;
+			
+			
+			const int NtQueryDriverEntryOrder = 325;
+			
+			
+			const int NtQueryEaFile = 326;
+			
+			
+			const int NtQueryFullAttributesFile = 327;
+			
+			
+			const int NtQueryInformationAtom = 328;
+			
+			
+			const int NtQueryInformationEnlistment = 330;
+			
+			
+			const int NtQueryInformationJobObject = 331;
+			
+			
+			const int NtQueryInformationPort = 332;
+			
+			
+			const int NtQueryInformationResourceManager = 333;
+			
+			
+			const int NtQueryInformationTransaction = 334;
+			
+			
+			const int NtQueryInformationTransactionManager = 335;
+			
+			
+			const int NtQueryInformationWorkerFactory = 336;
+			
+			
+			const int NtQueryInstallUILanguage = 337;
+			
+			
+			const int NtQueryIntervalProfile = 338;
+			
+			
+			const int NtQueryIoCompletion = 339;
+			
+			
+			const int NtQueryLicenseValue = 340;
+			
+			
+			const int NtQueryMultipleValueKey = 341;
+			
+			
+			const int NtQueryMutant = 342;
+			
+			
+			const int NtQueryOpenSubKeys = 343;
+			
+			
+			const int NtQueryOpenSubKeysEx = 344;
+			
+			
+			const int NtQueryPortInformationProcess = 345;
+			
+			
+			const int NtQueryQuotaInformationFile = 346;
+			
+			
+			const int NtQuerySecurityAttributesToken = 347;
+			
+			
+			const int NtQuerySecurityObject = 348;
+			
+			
+			const int NtQuerySemaphore = 350;
+			
+			
+			const int NtQuerySymbolicLinkObject = 351;
+			
+			
+			const int NtQuerySystemEnvironmentValue = 352;
+			
+			
+			const int NtQuerySystemEnvironmentValueEx = 353;
+			
+			
+			const int NtQuerySystemInformationEx = 354;
+			
+			
+			const int NtQueryTimerResolution = 355;
+			
+			
+			const int NtQueueApcThreadEx = 358;
+			
+			
+			const int NtRaiseException = 360;
+			
+			
+			const int NtRaiseHardError = 361;
+			
+			
+			const int NtReadOnlyEnlistment = 362;
+			
+			
+			const int NtRecoverEnlistment = 363;
+			
+			
+			const int NtRecoverResourceManager = 364;
+			
+			
+			const int NtRecoverTransactionManager = 365;
+			
+			
+			const int NtRegisterProtocolAddressInformation = 366;
+			
+			
+			const int NtRegisterThreadTerminatePort = 367;
+			
+			
+			const int NtReleaseKeyedEvent = 368;
+			
+			
+			const int NtReleaseWorkerFactoryWorker = 369;
+			
+			
+			const int NtRemoveIoCompletionEx = 370;
+			
+			
+			const int NtRemoveProcessDebug = 371;
+			
+			
+			const int NtRenameKey = 372;
+			
+			
+			const int NtRenameTransactionManager = 373;
+			
+			
+			const int NtReplaceKey = 374;
+			
+			
+			const int NtReplacePartitionUnit = 375;
+			
+			
+			const int NtReplyWaitReplyPort = 376;
+			
+			
+			const int NtRequestPort = 377;
+			
+			
+			const int NtResetEvent = 378;
+			
+			
+			const int NtResetWriteWatch = 379;
+			
+			
+			const int NtRestoreKey = 380;
+			
+			
+			const int NtResumeProcess = 381;
+			
+			
+			const int NtRollbackComplete = 383;
+			
+			
+			const int NtRollbackEnlistment = 384;
+			
+			
+			const int NtRollbackTransaction = 386;
+			
+			
+			const int NtRollforwardTransactionManager = 387;
+			
+			
+			const int NtSaveKey = 388;
+			
+			
+			const int NtSaveKeyEx = 389;
+			
+			
+			const int NtSaveMergedKeys = 390;
+			
+			
+			const int NtSecureConnectPort = 391;
+			
+			
+			const int NtSerializeBoot = 392;
+			
+			
+			const int NtSetBootEntryOrder = 393;
+			
+			
+			const int NtSetBootOptions = 394;
+			
+			
+			const int NtSetContextThread = 397;
+			
+			
+			const int NtSetDebugFilterState = 398;
+			
+			
+			const int NtSetDefaultHardErrorPort = 399;
+			
+			
+			const int NtSetDefaultLocale = 400;
+			
+			
+			const int NtSetDefaultUILanguage = 401;
+			
+			
+			const int NtSetDriverEntryOrder = 402;
+			
+			
+			const int NtSetEaFile = 403;
+			
+			
+			const int NtSetHighEventPair = 404;
+			
+			
+			const int NtSetHighWaitLowEventPair = 405;
+			
+			
+			const int NtSetInformationDebugObject = 407;
+			
+			
+			const int NtSetInformationEnlistment = 408;
+			
+			
+			const int NtSetInformationJobObject = 409;
+			
+			
+			const int NtSetInformationKey = 410;
+			
+			
+			const int NtSetInformationResourceManager = 411;
+			
+			
+			const int NtSetInformationToken = 413;
+			
+			
+			const int NtSetInformationTransaction = 414;
+			
+			
+			const int NtSetInformationTransactionManager = 415;
+			
+			
+			const int NtSetInformationWorkerFactory = 417;
+			
+			
+			const int NtSetIntervalProfile = 418;
+			
+			
+			const int NtSetIoCompletion = 419;
+			
+			
+			const int NtSetIoCompletionEx = 420;
+			
+			
+			const int NtSetLdtEntries = 421;
+			
+			
+			const int NtSetLowEventPair = 422;
+			
+			
+			const int NtSetLowWaitHighEventPair = 423;
+			
+			
+			const int NtSetQuotaInformationFile = 424;
+			
+			
+			const int NtSetSecurityObject = 425;
+			
+			
+			const int NtSetSystemEnvironmentValue = 426;
+			
+			
+			const int NtSetSystemEnvironmentValueEx = 427;
+			
+			
+			const int NtSetSystemInformation = 428;
+			
+			
+			const int NtSetSystemPowerState = 429;
+			
+			
+			const int NtSetSystemTime = 430;
+			
+			
+			const int NtSetThreadExecutionState = 431;
+			
+			
+			const int NtSetTimerEx = 433;
+			
+			
+			const int NtSetTimerResolution = 434;
+			
+			
+			const int NtSetUuidSeed = 435;
+			
+			
+			const int NtSetVolumeInformationFile = 436;
+			
+			
+			const int NtShutdownSystem = 438;
+			
+			
+			const int NtShutdownWorkerFactory = 439;
+			
+			
+			const int NtSignalAndWaitForSingleObject = 440;
+			
+			
+			const int NtSinglePhaseReject = 441;
+			
+			
+			const int NtStartProfile = 442;
+			
+			
+			const int NtStopProfile = 443;
+			
+			
+			const int NtSuspendProcess = 445;
+			
+			
+			const int NtSuspendThread = 446;
+			
+			
+			const int NtSystemDebugControl = 447;
+			
+			
+			const int NtTerminateJobObject = 449;
+			
+			
+			const int NtTestAlert = 450;
+			
+			
+			const int NtThawRegistry = 451;
+			
+			
+			const int NtThawTransactions = 452;
+			
+			
+			const int NtTraceControl = 453;
+			
+			
+			const int NtTranslateFilePath = 454;
+			
+			
+			const int NtUmsThreadYield = 455;
+			
+			
+			const int NtUnloadDriver = 456;
+			
+			
+			const int NtUnloadKey = 457;
+			
+			
+			const int NtUnloadKey2 = 458;
+			
+			
+			const int NtUnloadKeyEx = 459;
+			
+			
+			const int NtUnlockFile = 460;
+			
+			
+			const int NtUnlockVirtualMemory = 461;
+			
+			
+			const int NtVdmControl = 465;
+			
+			
+			const int NtWaitForDebugEvent = 467;
+			
+			
+			const int NtWaitForKeyedEvent = 468;
+			
+			
+			const int NtWaitForWorkViaWorkerFactory = 469;
+			
+			
+			const int NtWaitHighEventPair = 470;
+			
+			
+			const int NtWaitLowEventPair = 472;
+			
+		}
+	}
+	// windows_11:x64
+	namespace windows_11 {
+		namespace x64 {
+			
+			const int NtAccessCheck = 0;
+			
+			
+			const int NtWorkerFactoryWorkerReady = 1;
+			
+			
+			const int NtAcceptConnectPort = 2;
+			
+			
+			const int NtMapUserPhysicalPagesScatter = 3;
+			
+			
+			const int NtWaitForSingleObject = 4;
+			
+			
+			const int NtCallbackReturn = 5;
+			
+			
+			const int NtReadFile = 6;
+			
+			
+			const int NtDeviceIoControlFile = 7;
+			
+			
+			const int NtWriteFile = 8;
+			
+			
+			const int NtRemoveIoCompletion = 9;
+			
+			
+			const int NtReleaseSemaphore = 10;
+			
+			
+			const int NtReplyWaitReceivePort = 11;
+			
+			
+			const int NtReplyPort = 12;
+			
+			
+			const int NtSetInformationThread = 13;
+			
+			
+			const int NtSetEvent = 14;
+			
+			
+			const int NtClose = 15;
+			
+			
+			const int NtQueryObject = 16;
+			
+			
+			const int NtQueryInformationFile = 17;
+			
+			
+			const int NtOpenKey = 18;
+			
+			
+			const int NtEnumerateValueKey = 19;
+			
+			
+			const int NtFindAtom = 20;
+			
+			
+			const int NtQueryDefaultLocale = 21;
+			
+			
+			const int NtQueryKey = 22;
+			
+			
+			const int NtQueryValueKey = 23;
+			
+			
+			const int NtAllocateVirtualMemory = 24;
+			
+			
+			const int NtQueryInformationProcess = 25;
+			
+			
+			const int NtWaitForMultipleObjects32 = 26;
+			
+			
+			const int NtWriteFileGather = 27;
+			
+			
+			const int NtSetInformationProcess = 28;
+			
+			
+			const int NtCreateKey = 29;
+			
+			
+			const int NtFreeVirtualMemory = 30;
+			
+			
+			const int NtImpersonateClientOfPort = 31;
+			
+			
+			const int NtReleaseMutant = 32;
+			
+			
+			const int NtQueryInformationToken = 33;
+			
+			
+			const int NtRequestWaitReplyPort = 34;
+			
+			
+			const int NtQueryVirtualMemory = 35;
+			
+			
+			const int NtOpenThreadToken = 36;
+			
+			
+			const int NtQueryInformationThread = 37;
+			
+			
+			const int NtOpenProcess = 38;
+			
+			
+			const int NtSetInformationFile = 39;
+			
+			
+			const int NtMapViewOfSection = 40;
+			
+			
+			const int NtAccessCheckAndAuditAlarm = 41;
+			
+			
+			const int NtUnmapViewOfSection = 42;
+			
+			
+			const int NtReplyWaitReceivePortEx = 43;
+			
+			
+			const int NtTerminateProcess = 44;
+			
+			
+			const int NtSetEventBoostPriority = 45;
+			
+			
+			const int NtReadFileScatter = 46;
+			
+			
+			const int NtOpenThreadTokenEx = 47;
+			
+			
+			const int NtOpenProcessTokenEx = 48;
+			
+			
+			const int NtQueryPerformanceCounter = 49;
+			
+			
+			const int NtEnumerateKey = 50;
+			
+			
+			const int NtOpenFile = 51;
+			
+			
+			const int NtDelayExecution = 52;
+			
+			
+			const int NtQueryDirectoryFile = 53;
+			
+			
+			const int NtQuerySystemInformation = 54;
+			
+			
+			const int NtOpenSection = 55;
+			
+			
+			const int NtQueryTimer = 56;
+			
+			
+			const int NtFsControlFile = 57;
+			
+			
+			const int NtWriteVirtualMemory = 58;
+			
+			
+			const int NtCloseObjectAuditAlarm = 59;
+			
+			
+			const int NtDuplicateObject = 60;
+			
+			
+			const int NtQueryAttributesFile = 61;
+			
+			
+			const int NtClearEvent = 62;
+			
+			
+			const int NtReadVirtualMemory = 63;
+			
+			
+			const int NtOpenEvent = 64;
+			
+			
+			const int NtAdjustPrivilegesToken = 65;
+			
+			
+			const int NtDuplicateToken = 66;
+			
+			
+			const int NtContinue = 67;
+			
+			
+			const int NtQueryDefaultUILanguage = 68;
+			
+			
+			const int NtQueueApcThread = 69;
+			
+			
+			const int NtYieldExecution = 70;
+			
+			
+			const int NtAddAtom = 71;
+			
+			
+			const int NtCreateEvent = 72;
+			
+			
+			const int NtQueryVolumeInformationFile = 73;
+			
+			
+			const int NtCreateSection = 74;
+			
+			
+			const int NtFlushBuffersFile = 75;
+			
+			
+			const int NtApphelpCacheControl = 76;
+			
+			
+			const int NtCreateProcessEx = 77;
+			
+			
+			const int NtCreateThread = 78;
+			
+			
+			const int NtIsProcessInJob = 79;
+			
+			
+			const int NtProtectVirtualMemory = 80;
+			
+			
+			const int NtQuerySection = 81;
+			
+			
+			const int NtResumeThread = 82;
+			
+			
+			const int NtTerminateThread = 83;
+			
+			
+			const int NtReadRequestData = 84;
+			
+			
+			const int NtCreateFile = 85;
+			
+			
+			const int NtQueryEvent = 86;
+			
+			
+			const int NtWriteRequestData = 87;
+			
+			
+			const int NtOpenDirectoryObject = 88;
+			
+			
+			const int NtAccessCheckByTypeAndAuditAlarm = 89;
+			
+			
+			const int NtWaitForMultipleObjects = 91;
+			
+			
+			const int NtSetInformationObject = 92;
+			
+			
+			const int NtCancelIoFile = 93;
+			
+			
+			const int NtTraceEvent = 94;
+			
+			
+			const int NtPowerInformation = 95;
+			
+			
+			const int NtSetValueKey = 96;
+			
+			
+			const int NtCancelTimer = 97;
+			
+			
+			const int NtSetTimer = 98;
+			
+			
+			const int NtAccessCheckByType = 99;
+			
+			
+			const int NtAccessCheckByTypeResultList = 100;
+			
+			
+			const int NtAccessCheckByTypeResultListAndAuditAlarm = 101;
+			
+			
+			const int NtAccessCheckByTypeResultListAndAuditAlarmByHandle = 102;
+			
+			
+			const int NtAcquireCrossVmMutant = 103;
+			
+			
+			const int NtAcquireProcessActivityReference = 104;
+			
+			
+			const int NtAddAtomEx = 105;
+			
+			
+			const int NtAddBootEntry = 106;
+			
+			
+			const int NtAddDriverEntry = 107;
+			
+			
+			const int NtAdjustGroupsToken = 108;
+			
+			
+			const int NtAdjustTokenClaimsAndDeviceGroups = 109;
+			
+			
+			const int NtAlertMultipleThreadByThreadId = 110;
+			
+			
+			const int NtAlertResumeThread = 111;
+			
+			
+			const int NtAlertThread = 112;
+			
+			
+			const int NtAlertThreadByThreadId = 113;
+			
+			
+			const int NtAlertThreadByThreadIdEx = 114;
+			
+			
+			const int NtAllocateLocallyUniqueId = 115;
+			
+			
+			const int NtAllocateReserveObject = 116;
+			
+			
+			const int NtAllocateUserPhysicalPages = 117;
+			
+			
+			const int NtAllocateUserPhysicalPagesEx = 118;
+			
+			
+			const int NtAllocateUuids = 119;
+			
+			
+			const int NtAllocateVirtualMemoryEx = 120;
+			
+			
+			const int NtAlpcAcceptConnectPort = 121;
+			
+			
+			const int NtAlpcCancelMessage = 122;
+			
+			
+			const int NtAlpcConnectPort = 123;
+			
+			
+			const int NtAlpcConnectPortEx = 124;
+			
+			
+			const int NtAlpcCreatePort = 125;
+			
+			
+			const int NtAlpcCreatePortSection = 126;
+			
+			
+			const int NtAlpcCreateResourceReserve = 127;
+			
+			
+			const int NtAlpcCreateSectionView = 128;
+			
+			
+			const int NtAlpcCreateSecurityContext = 129;
+			
+			
+			const int NtAlpcDeletePortSection = 130;
+			
+			
+			const int NtAlpcDeleteResourceReserve = 131;
+			
+			
+			const int NtAlpcDeleteSectionView = 132;
+			
+			
+			const int NtAlpcDeleteSecurityContext = 133;
+			
+			
+			const int NtAlpcDisconnectPort = 134;
+			
+			
+			const int NtAlpcImpersonateClientContainerOfPort = 135;
+			
+			
+			const int NtAlpcImpersonateClientOfPort = 136;
+			
+			
+			const int NtAlpcOpenSenderProcess = 137;
+			
+			
+			const int NtAlpcOpenSenderThread = 138;
+			
+			
+			const int NtAlpcQueryInformation = 139;
+			
+			
+			const int NtAlpcQueryInformationMessage = 140;
+			
+			
+			const int NtAlpcRevokeSecurityContext = 141;
+			
+			
+			const int NtAlpcSendWaitReceivePort = 142;
+			
+			
+			const int NtAlpcSetInformation = 143;
+			
+			
+			const int NtAreMappedFilesTheSame = 144;
+			
+			
+			const int NtAssignProcessToJobObject = 145;
+			
+			
+			const int NtAssociateWaitCompletionPacket = 146;
+			
+			
+			const int NtCallEnclave = 147;
+			
+			
+			const int NtCancelIoFileEx = 148;
+			
+			
+			const int NtCancelSynchronousIoFile = 149;
+			
+			
+			const int NtCancelTimer2 = 150;
+			
+			
+			const int NtCancelWaitCompletionPacket = 151;
+			
+			
+			const int NtChangeProcessState = 152;
+			
+			
+			const int NtChangeThreadState = 153;
+			
+			
+			const int NtCommitComplete = 154;
+			
+			
+			const int NtCommitEnlistment = 155;
+			
+			
+			const int NtCommitRegistryTransaction = 156;
+			
+			
+			const int NtCommitTransaction = 157;
+			
+			
+			const int NtCompactKeys = 158;
+			
+			
+			const int NtCompareObjects = 159;
+			
+			
+			const int NtCompareSigningLevels = 160;
+			
+			
+			const int NtCompareTokens = 161;
+			
+			
+			const int NtCompleteConnectPort = 162;
+			
+			
+			const int NtCompressKey = 163;
+			
+			
+			const int NtConnectPort = 164;
+			
+			
+			const int NtContinueEx = 165;
+			
+			
+			const int NtConvertBetweenAuxiliaryCounterAndPerformanceCounter = 166;
+			
+			
+			const int NtCopyFileChunk = 167;
+			
+			
+			const int NtCreateCpuPartition = 168;
+			
+			
+			const int NtCreateCrossVmEvent = 169;
+			
+			
+			const int NtCreateCrossVmMutant = 170;
+			
+			
+			const int NtCreateDebugObject = 171;
+			
+			
+			const int NtCreateDirectoryObject = 172;
+			
+			
+			const int NtCreateDirectoryObjectEx = 173;
+			
+			
+			const int NtCreateEnclave = 174;
+			
+			
+			const int NtCreateEnlistment = 175;
+			
+			
+			const int NtCreateEventPair = 176;
+			
+			
+			const int NtCreateIRTimer = 177;
+			
+			
+			const int NtCreateIoCompletion = 178;
+			
+			
+			const int NtCreateIoRing = 179;
+			
+			
+			const int NtCreateJobObject = 180;
+			
+			
+			const int NtCreateJobSet = 181;
+			
+			
+			const int NtCreateKeyTransacted = 182;
+			
+			
+			const int NtCreateKeyedEvent = 183;
+			
+			
+			const int NtCreateLowBoxToken = 184;
+			
+			
+			const int NtCreateMailslotFile = 185;
+			
+			
+			const int NtCreateMutant = 186;
+			
+			
+			const int NtCreateNamedPipeFile = 187;
+			
+			
+			const int NtCreatePagingFile = 188;
+			
+			
+			const int NtCreatePartition = 189;
+			
+			
+			const int NtCreatePort = 190;
+			
+			
+			const int NtCreatePrivateNamespace = 191;
+			
+			
+			const int NtCreateProcess = 192;
+			
+			
+			const int NtCreateProcessStateChange = 193;
+			
+			
+			const int NtCreateProfile = 194;
+			
+			
+			const int NtCreateProfileEx = 195;
+			
+			
+			const int NtCreateRegistryTransaction = 196;
+			
+			
+			const int NtCreateResourceManager = 197;
+			
+			
+			const int NtCreateSectionEx = 198;
+			
+			
+			const int NtCreateSemaphore = 199;
+			
+			
+			const int NtCreateSymbolicLinkObject = 200;
+			
+			
+			const int NtCreateThreadEx = 201;
+			
+			
+			const int NtCreateThreadStateChange = 202;
+			
+			
+			const int NtCreateTimer = 203;
+			
+			
+			const int NtCreateTimer2 = 204;
+			
+			
+			const int NtCreateToken = 205;
+			
+			
+			const int NtCreateTokenEx = 206;
+			
+			
+			const int NtCreateTransaction = 207;
+			
+			
+			const int NtCreateTransactionManager = 208;
+			
+			
+			const int NtCreateUserProcess = 209;
+			
+			
+			const int NtCreateWaitCompletionPacket = 210;
+			
+			
+			const int NtCreateWaitablePort = 211;
+			
+			
+			const int NtCreateWnfStateName = 212;
+			
+			
+			const int NtCreateWorkerFactory = 213;
+			
+			
+			const int NtDebugActiveProcess = 214;
+			
+			
+			const int NtDebugContinue = 215;
+			
+			
+			const int NtDeleteAtom = 216;
+			
+			
+			const int NtDeleteBootEntry = 217;
+			
+			
+			const int NtDeleteDriverEntry = 218;
+			
+			
+			const int NtDeleteFile = 219;
+			
+			
+			const int NtDeleteKey = 220;
+			
+			
+			const int NtDeleteObjectAuditAlarm = 221;
+			
+			
+			const int NtDeletePrivateNamespace = 222;
+			
+			
+			const int NtDeleteValueKey = 223;
+			
+			
+			const int NtDeleteWnfStateData = 224;
+			
+			
+			const int NtDeleteWnfStateName = 225;
+			
+			
+			const int NtDirectGraphicsCall = 226;
+			
+			
+			const int NtDisableLastKnownGood = 227;
+			
+			
+			const int NtDisplayString = 228;
+			
+			
+			const int NtDrawText = 229;
+			
+			
+			const int NtEnableLastKnownGood = 230;
+			
+			
+			const int NtEnumerateBootEntries = 231;
+			
+			
+			const int NtEnumerateDriverEntries = 232;
+			
+			
+			const int NtEnumerateSystemEnvironmentValuesEx = 233;
+			
+			
+			const int NtEnumerateTransactionObject = 234;
+			
+			
+			const int NtExtendSection = 235;
+			
+			
+			const int NtFilterBootOption = 236;
+			
+			
+			const int NtFilterToken = 237;
+			
+			
+			const int NtFilterTokenEx = 238;
+			
+			
+			const int NtFlushBuffersFileEx = 239;
+			
+			
+			const int NtFlushInstallUILanguage = 240;
+			
+			
+			const int NtFlushInstructionCache = 241;
+			
+			
+			const int NtFlushKey = 242;
+			
+			
+			const int NtFlushProcessWriteBuffers = 243;
+			
+			
+			const int NtFlushVirtualMemory = 244;
+			
+			
+			const int NtFlushWriteBuffer = 245;
+			
+			
+			const int NtFreeUserPhysicalPages = 246;
+			
+			
+			const int NtFreezeRegistry = 247;
+			
+			
+			const int NtFreezeTransactions = 248;
+			
+			
+			const int NtGetCachedSigningLevel = 249;
+			
+			
+			const int NtGetCompleteWnfStateSubscription = 250;
+			
+			
+			const int NtGetContextThread = 251;
+			
+			
+			const int NtGetCurrentProcessorNumber = 252;
+			
+			
+			const int NtGetCurrentProcessorNumberEx = 253;
+			
+			
+			const int NtGetDevicePowerState = 254;
+			
+			
+			const int NtGetMUIRegistryInfo = 255;
+			
+			
+			const int NtGetNextProcess = 256;
+			
+			
+			const int NtGetNextThread = 257;
+			
+			
+			const int NtGetNlsSectionPtr = 258;
+			
+			
+			const int NtGetNotificationResourceManager = 259;
+			
+			
+			const int NtGetWriteWatch = 260;
+			
+			
+			const int NtImpersonateAnonymousToken = 261;
+			
+			
+			const int NtImpersonateThread = 262;
+			
+			
+			const int NtInitializeEnclave = 263;
+			
+			
+			const int NtInitializeNlsFiles = 264;
+			
+			
+			const int NtInitializeRegistry = 265;
+			
+			
+			const int NtInitiatePowerAction = 266;
+			
+			
+			const int NtIsSystemResumeAutomatic = 267;
+			
+			
+			const int NtIsUILanguageComitted = 268;
+			
+			
+			const int NtListenPort = 269;
+			
+			
+			const int NtLoadDriver = 270;
+			
+			
+			const int NtLoadEnclaveData = 271;
+			
+			
+			const int NtLoadKey = 272;
+			
+			
+			const int NtLoadKey2 = 273;
+			
+			
+			const int NtLoadKey3 = 274;
+			
+			
+			const int NtLoadKeyEx = 275;
+			
+			
+			const int NtLockFile = 276;
+			
+			
+			const int NtLockProductActivationKeys = 277;
+			
+			
+			const int NtLockRegistryKey = 278;
+			
+			
+			const int NtLockVirtualMemory = 279;
+			
+			
+			const int NtMakePermanentObject = 280;
+			
+			
+			const int NtMakeTemporaryObject = 281;
+			
+			
+			const int NtManageHotPatch = 282;
+			
+			
+			const int NtManagePartition = 283;
+			
+			
+			const int NtMapCMFModule = 284;
+			
+			
+			const int NtMapUserPhysicalPages = 285;
+			
+			
+			const int NtMapViewOfSectionEx = 286;
+			
+			
+			const int NtModifyBootEntry = 287;
+			
+			
+			const int NtModifyDriverEntry = 288;
+			
+			
+			const int NtNotifyChangeDirectoryFile = 289;
+			
+			
+			const int NtNotifyChangeDirectoryFileEx = 290;
+			
+			
+			const int NtNotifyChangeKey = 291;
+			
+			
+			const int NtNotifyChangeMultipleKeys = 292;
+			
+			
+			const int NtNotifyChangeSession = 293;
+			
+			
+			const int NtOpenCpuPartition = 294;
+			
+			
+			const int NtOpenEnlistment = 295;
+			
+			
+			const int NtOpenEventPair = 296;
+			
+			
+			const int NtOpenIoCompletion = 297;
+			
+			
+			const int NtOpenJobObject = 298;
+			
+			
+			const int NtOpenKeyEx = 299;
+			
+			
+			const int NtOpenKeyTransacted = 300;
+			
+			
+			const int NtOpenKeyTransactedEx = 301;
+			
+			
+			const int NtOpenKeyedEvent = 302;
+			
+			
+			const int NtOpenMutant = 303;
+			
+			
+			const int NtOpenObjectAuditAlarm = 304;
+			
+			
+			const int NtOpenPartition = 305;
+			
+			
+			const int NtOpenPrivateNamespace = 306;
+			
+			
+			const int NtOpenProcessToken = 307;
+			
+			
+			const int NtOpenRegistryTransaction = 308;
+			
+			
+			const int NtOpenResourceManager = 309;
+			
+			
+			const int NtOpenSemaphore = 310;
+			
+			
+			const int NtOpenSession = 311;
+			
+			
+			const int NtOpenSymbolicLinkObject = 312;
+			
+			
+			const int NtOpenThread = 313;
+			
+			
+			const int NtOpenTimer = 314;
+			
+			
+			const int NtOpenTransaction = 315;
+			
+			
+			const int NtOpenTransactionManager = 316;
+			
+			
+			const int NtPlugPlayControl = 317;
+			
+			
+			const int NtPrePrepareComplete = 318;
+			
+			
+			const int NtPrePrepareEnlistment = 319;
+			
+			
+			const int NtPrepareComplete = 320;
+			
+			
+			const int NtPrepareEnlistment = 321;
+			
+			
+			const int NtPrivilegeCheck = 322;
+			
+			
+			const int NtPrivilegeObjectAuditAlarm = 323;
+			
+			
+			const int NtPrivilegedServiceAuditAlarm = 324;
+			
+			
+			const int NtPropagationComplete = 325;
+			
+			
+			const int NtPropagationFailed = 326;
+			
+			
+			const int NtPssCaptureVaSpaceBulk = 327;
+			
+			
+			const int NtPulseEvent = 328;
+			
+			
+			const int NtQueryAuxiliaryCounterFrequency = 329;
+			
+			
+			const int NtQueryBootEntryOrder = 330;
+			
+			
+			const int NtQueryBootOptions = 331;
+			
+			
+			const int NtQueryDebugFilterState = 332;
+			
+			
+			const int NtQueryDirectoryFileEx = 333;
+			
+			
+			const int NtQueryDirectoryObject = 334;
+			
+			
+			const int NtQueryDriverEntryOrder = 335;
+			
+			
+			const int NtQueryEaFile = 336;
+			
+			
+			const int NtQueryFullAttributesFile = 337;
+			
+			
+			const int NtQueryInformationAtom = 338;
+			
+			
+			const int NtQueryInformationByName = 339;
+			
+			
+			const int NtQueryInformationCpuPartition = 340;
+			
+			
+			const int NtQueryInformationEnlistment = 341;
+			
+			
+			const int NtQueryInformationJobObject = 342;
+			
+			
+			const int NtQueryInformationPort = 343;
+			
+			
+			const int NtQueryInformationResourceManager = 344;
+			
+			
+			const int NtQueryInformationTransaction = 345;
+			
+			
+			const int NtQueryInformationTransactionManager = 346;
+			
+			
+			const int NtQueryInformationWorkerFactory = 347;
+			
+			
+			const int NtQueryInstallUILanguage = 348;
+			
+			
+			const int NtQueryIntervalProfile = 349;
+			
+			
+			const int NtQueryIoCompletion = 350;
+			
+			
+			const int NtQueryIoRingCapabilities = 351;
+			
+			
+			const int NtQueryLicenseValue = 352;
+			
+			
+			const int NtQueryMultipleValueKey = 353;
+			
+			
+			const int NtQueryMutant = 354;
+			
+			
+			const int NtQueryOpenSubKeys = 355;
+			
+			
+			const int NtQueryOpenSubKeysEx = 356;
+			
+			
+			const int NtQueryPortInformationProcess = 357;
+			
+			
+			const int NtQueryQuotaInformationFile = 358;
+			
+			
+			const int NtQuerySecurityAttributesToken = 359;
+			
+			
+			const int NtQuerySecurityObject = 360;
+			
+			
+			const int NtQuerySecurityPolicy = 361;
+			
+			
+			const int NtQuerySemaphore = 362;
+			
+			
+			const int NtQuerySymbolicLinkObject = 363;
+			
+			
+			const int NtQuerySystemEnvironmentValue = 364;
+			
+			
+			const int NtQuerySystemEnvironmentValueEx = 365;
+			
+			
+			const int NtQuerySystemInformationEx = 366;
+			
+			
+			const int NtQueryTimerResolution = 367;
+			
+			
+			const int NtQueryWnfStateData = 368;
+			
+			
+			const int NtQueryWnfStateNameInformation = 369;
+			
+			
+			const int NtQueueApcThreadEx = 370;
+			
+			
+			const int NtQueueApcThreadEx2 = 371;
+			
+			
+			const int NtRaiseException = 372;
+			
+			
+			const int NtRaiseHardError = 373;
+			
+			
+			const int NtReadOnlyEnlistment = 374;
+			
+			
+			const int NtReadVirtualMemoryEx = 375;
+			
+			
+			const int NtRecoverEnlistment = 376;
+			
+			
+			const int NtRecoverResourceManager = 377;
+			
+			
+			const int NtRecoverTransactionManager = 378;
+			
+			
+			const int NtRegisterProtocolAddressInformation = 379;
+			
+			
+			const int NtRegisterThreadTerminatePort = 380;
+			
+			
+			const int NtReleaseKeyedEvent = 381;
+			
+			
+			const int NtReleaseWorkerFactoryWorker = 382;
+			
+			
+			const int NtRemoveIoCompletionEx = 383;
+			
+			
+			const int NtRemoveProcessDebug = 384;
+			
+			
+			const int NtRenameKey = 385;
+			
+			
+			const int NtRenameTransactionManager = 386;
+			
+			
+			const int NtReplaceKey = 387;
+			
+			
+			const int NtReplacePartitionUnit = 388;
+			
+			
+			const int NtReplyWaitReplyPort = 389;
+			
+			
+			const int NtRequestPort = 390;
+			
+			
+			const int NtResetEvent = 391;
+			
+			
+			const int NtResetWriteWatch = 392;
+			
+			
+			const int NtRestoreKey = 393;
+			
+			
+			const int NtResumeProcess = 394;
+			
+			
+			const int NtRevertContainerImpersonation = 395;
+			
+			
+			const int NtRollbackComplete = 396;
+			
+			
+			const int NtRollbackEnlistment = 397;
+			
+			
+			const int NtRollbackRegistryTransaction = 398;
+			
+			
+			const int NtRollbackTransaction = 399;
+			
+			
+			const int NtRollforwardTransactionManager = 400;
+			
+			
+			const int NtSaveKey = 401;
+			
+			
+			const int NtSaveKeyEx = 402;
+			
+			
+			const int NtSaveMergedKeys = 403;
+			
+			
+			const int NtSecureConnectPort = 404;
+			
+			
+			const int NtSerializeBoot = 405;
+			
+			
+			const int NtSetBootEntryOrder = 406;
+			
+			
+			const int NtSetBootOptions = 407;
+			
+			
+			const int NtSetCachedSigningLevel = 408;
+			
+			
+			const int NtSetCachedSigningLevel2 = 409;
+			
+			
+			const int NtSetContextThread = 410;
+			
+			
+			const int NtSetDebugFilterState = 411;
+			
+			
+			const int NtSetDefaultHardErrorPort = 412;
+			
+			
+			const int NtSetDefaultLocale = 413;
+			
+			
+			const int NtSetDefaultUILanguage = 414;
+			
+			
+			const int NtSetDriverEntryOrder = 415;
+			
+			
+			const int NtSetEaFile = 416;
+			
+			
+			const int NtSetEventEx = 417;
+			
+			
+			const int NtSetHighEventPair = 418;
+			
+			
+			const int NtSetHighWaitLowEventPair = 419;
+			
+			
+			const int NtSetIRTimer = 420;
+			
+			
+			const int NtSetInformationCpuPartition = 421;
+			
+			
+			const int NtSetInformationDebugObject = 422;
+			
+			
+			const int NtSetInformationEnlistment = 423;
+			
+			
+			const int NtSetInformationIoRing = 424;
+			
+			
+			const int NtSetInformationJobObject = 425;
+			
+			
+			const int NtSetInformationKey = 426;
+			
+			
+			const int NtSetInformationResourceManager = 427;
+			
+			
+			const int NtSetInformationSymbolicLink = 428;
+			
+			
+			const int NtSetInformationToken = 429;
+			
+			
+			const int NtSetInformationTransaction = 430;
+			
+			
+			const int NtSetInformationTransactionManager = 431;
+			
+			
+			const int NtSetInformationVirtualMemory = 432;
+			
+			
+			const int NtSetInformationWorkerFactory = 433;
+			
+			
+			const int NtSetIntervalProfile = 434;
+			
+			
+			const int NtSetIoCompletion = 435;
+			
+			
+			const int NtSetIoCompletionEx = 436;
+			
+			
+			const int NtSetLdtEntries = 437;
+			
+			
+			const int NtSetLowEventPair = 438;
+			
+			
+			const int NtSetLowWaitHighEventPair = 439;
+			
+			
+			const int NtSetQuotaInformationFile = 440;
+			
+			
+			const int NtSetSecurityObject = 441;
+			
+			
+			const int NtSetSystemEnvironmentValue = 442;
+			
+			
+			const int NtSetSystemEnvironmentValueEx = 443;
+			
+			
+			const int NtSetSystemInformation = 444;
+			
+			
+			const int NtSetSystemPowerState = 445;
+			
+			
+			const int NtSetSystemTime = 446;
+			
+			
+			const int NtSetThreadExecutionState = 447;
+			
+			
+			const int NtSetTimer2 = 448;
+			
+			
+			const int NtSetTimerEx = 449;
+			
+			
+			const int NtSetTimerResolution = 450;
+			
+			
+			const int NtSetUuidSeed = 451;
+			
+			
+			const int NtSetVolumeInformationFile = 452;
+			
+			
+			const int NtSetWnfProcessNotificationEvent = 453;
+			
+			
+			const int NtShutdownSystem = 454;
+			
+			
+			const int NtShutdownWorkerFactory = 455;
+			
+			
+			const int NtSignalAndWaitForSingleObject = 456;
+			
+			
+			const int NtSinglePhaseReject = 457;
+			
+			
+			const int NtStartProfile = 458;
+			
+			
+			const int NtStopProfile = 459;
+			
+			
+			const int NtSubmitIoRing = 460;
+			
+			
+			const int NtSubscribeWnfStateChange = 461;
+			
+			
+			const int NtSuspendProcess = 462;
+			
+			
+			const int NtSuspendThread = 463;
+			
+			
+			const int NtSystemDebugControl = 464;
+			
+			
+			const int NtTerminateEnclave = 465;
+			
+			
+			const int NtTerminateJobObject = 466;
+			
+			
+			const int NtTestAlert = 467;
+			
+			
+			const int NtThawRegistry = 468;
+			
+			
+			const int NtThawTransactions = 469;
+			
+			
+			const int NtTraceControl = 470;
+			
+			
+			const int NtTranslateFilePath = 471;
+			
+			
+			const int NtUmsThreadYield = 472;
+			
+			
+			const int NtUnloadDriver = 473;
+			
+			
+			const int NtUnloadKey = 474;
+			
+			
+			const int NtUnloadKey2 = 475;
+			
+			
+			const int NtUnloadKeyEx = 476;
+			
+			
+			const int NtUnlockFile = 477;
+			
+			
+			const int NtUnlockVirtualMemory = 478;
+			
+			
+			const int NtUnmapViewOfSectionEx = 479;
+			
+			
+			const int NtUnsubscribeWnfStateChange = 480;
+			
+			
+			const int NtUpdateWnfStateData = 481;
+			
+			
+			const int NtVdmControl = 482;
+			
+			
+			const int NtWaitForAlertByThreadId = 483;
+			
+			
+			const int NtWaitForDebugEvent = 484;
+			
+			
+			const int NtWaitForKeyedEvent = 485;
+			
+			
+			const int NtWaitForWorkViaWorkerFactory = 486;
+			
+			
+			const int NtWaitHighEventPair = 487;
+			
+			
+			const int NtWaitLowEventPair = 488;
+			
+		}
+	}
 	// freebsd:x64
 	namespace freebsd {
 		namespace x64 {
