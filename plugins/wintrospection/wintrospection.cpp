@@ -631,6 +631,9 @@ void on_has_mapping_prefix(CPUState *cpu, OsiProc *p, const char *prefix,
 ****************************************************************** */
 
 void task_change(CPUState *cpu) {
+  if (!g_initialized_kernel) {
+    return;  // kernel manager not ready yet (pre-snapshot cold boot)
+  }
   if(last_seen_paddr != 0) {
     g_process_manager.reset(new WindowsProcessManager());
   }
@@ -653,7 +656,11 @@ bool asid_changed(CPUState *cpu, target_ulong old_pgd, target_ulong new_pgd) {
     initialize_introspection(cpu);
   }
 
-  if (old_pgd != new_pgd)
+  // Only arm start_block_exec (→ task_change, which dereferences the kernel
+  // object) once introspection has actually initialized; during the pre-snapshot
+  // cold-boot window initialize_introspection defers and the kernel manager is
+  // not yet usable.
+  if (g_initialized_kernel && old_pgd != new_pgd)
     panda_enable_callback(self, PANDA_CB_START_BLOCK_EXEC, pcb_startblock);
 
   return false;
@@ -805,11 +812,22 @@ void initialize_introspection(CPUState *cpu) {
   auto kpcr = (panda_os_bits == 64) ? get_kpcr_amd64(cpu) : get_kpcr_i386(cpu);
   auto width = (panda_os_bits == 64) ? 8 : 4;
 
+  // Defer (don't abort) when the CPU isn't in a usable kernel state yet. PANDBox
+  // loads this plugin before reverting to the analysis snapshot, so the guest
+  // briefly cold-boots first; the first asid_changed then fires with kpcr==0
+  // (real mode, no paging). Returning here leaves g_initialized_kernel false so a
+  // later asid_changed — after loadvm restores running Windows — initializes
+  // cleanly. (Same cold-boot robustness as osi_linux.)
+  if (!kpcr) {
+    return;
+  }
+
   auto success = g_kernel_manager->initialize(pmem, width, asid_entry->second,
                                               kpcr, is_windows_pae_enabled(cpu));
   if (!success) {
-    fprintf(stderr, "Error initializing kernel manager\n");
-    exit(3);
+    // Transient pre-snapshot-restore failure: defer and retry on a later asid
+    // change rather than aborting the whole run.
+    return;
   }
   g_initialized_kernel = true;
 
