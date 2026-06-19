@@ -162,7 +162,13 @@ foreach plugin: plugin_list
                         cpp_args: c_args + target_c_args + cpp_args + plugin_cflags,
                         link_args: link_args + target_link_args,
                         include_directories: includes,
-                        link_with: main_obj,
+                        # link_whole (not link_with): the plugin's main object holds
+                        # init_plugin/uninit_plugin, which the loader dlsym's. With
+                        # link_with, macOS only pulls referenced objects — so if the
+                        # secondary sources don't reference the main (e.g.
+                        # wintrospection: pandamemory.cpp doesn't call into
+                        # wintrospection.cpp), init_plugin is dropped and load fails.
+                        link_whole: main_obj,
                         dependencies: dependencies,
                         override_options: ['b_lundef=false', 'werror=false'])
                 endif
