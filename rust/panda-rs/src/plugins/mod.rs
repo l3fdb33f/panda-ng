@@ -456,9 +456,15 @@ impl Plugin {
             panda_require(c_name.as_ptr());
         }
 
-        let path = get_panda_plugin_dir()
-            .expect("Could not find panda plugin dir, consider setting PANDA_PLUGIN_DIR")
-            .join(&format!("panda_{}.so", name));
+        let plugin_dir = get_panda_plugin_dir()
+            .expect("Could not find panda plugin dir, consider setting PANDA_PLUGIN_DIR");
+
+        // panda-ng names plugins "libpanda-<name>_<arch>-softmmu.so"; classic PANDA
+        // used "panda_<name>.so". Prefer the panda-ng name, fall back to classic.
+        let mut path = plugin_dir.join(&format!("libpanda-{}_{}-softmmu.so", name, ARCH_NAME));
+        if !path.exists() {
+            path = plugin_dir.join(&format!("panda_{}.so", name));
+        }
 
         if !path.exists() {
             panic!("Could not find plugin {} at {}", name, path.display());
