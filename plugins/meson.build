@@ -1,6 +1,9 @@
 plugin_list = run_command('cat', 'config.panda', check: true, capture: true).stdout().strip().split('\n')
 fake_libc_include = '../utils/fake_libc_include'
 plugin_ext = {}
+# Shared-object suffix for cargo output (rust plugins): cargo emits .dylib on
+# macOS, .so on Linux. (C/C++ plugins are handled by meson's shared_library.)
+dll_suffix = host_machine.system() == 'darwin' ? 'dylib' : 'so'
 
 # First pass: Generate extension headers
 foreach plugin: plugin_list
@@ -82,10 +85,10 @@ foreach plugin: plugin_list
 
                 if get_option('plugin_debug_rust')
                     rust_build_cmd += ['--debug']
-                    output_so = '@BUILD_ROOT@/plugins/rust/@0@/@1@/debug/lib@0@.so'.format(plugin,tgt)
+                    output_so = '@BUILD_ROOT@/plugins/rust/@0@/@1@/debug/lib@0@.'.format(plugin,tgt) + dll_suffix
                 else
                     rust_build_cmd += ['--release']
-                    output_so = '@BUILD_ROOT@/plugins/rust/@0@/@1@/release/lib@0@.so'.format(plugin,tgt)
+                    output_so = '@BUILD_ROOT@/plugins/rust/@0@/@1@/release/lib@0@.'.format(plugin,tgt) + dll_suffix
                 endif
 
                 tgt1 = custom_target('panda-@0@_@1@'.format(plugin, tgt),
@@ -107,7 +110,7 @@ foreach plugin: plugin_list
                     input: [tgt1],
                     build_by_default: true,
                     build_always_stale: true,
-                    output: ['libpanda-@0@_@1@'.format(plugin, rust_tgt)+'.so'],
+                    output: ['libpanda-@0@_@1@'.format(plugin, rust_tgt)+'.' + dll_suffix],
                     install: true,
                     install_dir: 'plugin/' + plugin,
                     command: [bin_cp, output_so, '@OUTPUT0@'],

@@ -1,4 +1,5 @@
 [package]
+build = "build.rs"
 name = "cosi"
 version = "0.1.0"
 authors = ["Luke Craig <Luke.Craig@ll.mit.edu>", "Jordan McLeod <Jordan.McLeod@ll.mit.edu>"]

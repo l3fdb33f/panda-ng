@@ -1,0 +1,8 @@
+# macOS: plugin cdylibs resolve panda_*/qemu_* symbols from libpanda at load,
+# so allow undefined symbols at link time (the C/C++ plugins get this from
+# meson's b_lundef=false; rust plugins need it set explicitly). Target-scoped
+# so Linux (where undefined symbols in a .so are fine by default) is unaffected.
+[target.aarch64-apple-darwin]
+rustflags = ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"]
+[target.x86_64-apple-darwin]
+rustflags = ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"]

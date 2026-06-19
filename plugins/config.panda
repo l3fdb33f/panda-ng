@@ -5,3 +5,5 @@ osi_linux
 proc_start_linux
 syscalls2
 wintrospection
+cosi
+osi_cosi
