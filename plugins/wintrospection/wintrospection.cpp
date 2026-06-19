@@ -880,3 +880,7 @@ void uninit_plugin(void *_self) {
   // into our exited plugin.
   panda_do_flush_tb();
 }
+
+// Single-TU merge (see meson.build): pull pandamemory definitions in so the
+// whole plugin links into one shared object and init_plugin is exported.
+#include "pandamemory.cpp"
