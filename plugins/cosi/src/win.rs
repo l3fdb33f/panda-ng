@@ -24,8 +24,6 @@ use crate::symbol_table;
 /// Cached ntoskrnl base (0 = not yet determined).
 static KBASE: AtomicU64 = AtomicU64::new(0);
 
-/// QEMU x86 segment index for GS (ES=0,CS=1,SS=2,DS=3,FS=4,GS=5).
-const R_GS: usize = 5;
 /// Canonical kernel-half lower bound (x86-64 48-bit).
 const KERNEL_MIN: u64 = 0xffff_0000_0000_0000;
 /// x86-64 page-table physical-address mask (bits 12..51).
@@ -36,22 +34,23 @@ pub fn is_windows() -> bool {
     symbol_table().metadata.windows.is_some()
 }
 
-// ---- raw CPU env access ----------------------------------------------------
-
-#[inline]
-fn env(cpu: &CPUState) -> &panda::sys::CPUX86State {
-    // SAFETY: on i386/x86_64 targets the arch env is a `CPUX86State`. panda-ng's
-    // modern-QEMU CPUState has no `env_ptr` field; fetch it via panda_cpu_env().
-    unsafe {
-        &*(panda::sys::panda_cpu_env(cpu as *const _ as *mut _)
-            as *const panda::sys::CPUX86State)
-    }
+// ---- raw CPU register / MSR access -----------------------------------------
+// Read CPU state through layout-safe accessors compiled into libpanda, NOT by
+// casting panda_cpu_env() to a bindgen `CPUX86State`. That struct's layout
+// depends on the QEMU build config (CONFIG_* #ifdefs), so the bindgen view
+// drifts from the compiled emulator and every field read returns garbage. These
+// helpers (panda_arch.c) are built with libpanda and always see the real layout.
+extern "C" {
+    fn panda_get_gpr(cpu: *const CPUState, idx: i32) -> u64;
+    fn panda_get_lstar(cpu: *const CPUState) -> u64;
+    fn panda_get_kernel_gs_base(cpu: *const CPUState) -> u64;
+    fn panda_get_gs_base(cpu: *const CPUState) -> u64;
 }
 
 /// Read a general-purpose register by QEMU index (RAX=0,RCX=1,RDX=2,RBX=3,
 /// RSP=4,RBP=5,RSI=6,RDI=7,R8=8,...,R15=15).
 pub fn reg(cpu: &CPUState, idx: usize) -> u64 {
-    env(cpu).regs[idx] as u64
+    unsafe { panda_get_gpr(cpu as *const CPUState, idx as i32) }
 }
 
 // ---- guest reads (current CR3) ---------------------------------------------
@@ -153,10 +152,16 @@ fn is_pe_image(cpu: &mut CPUState, base: target_ptr_t) -> bool {
 /// headers are mapped even under the KPTI shadow CR3, so this works from any
 /// context. Returns the base, or 0 on failure.
 pub fn determine_kaslr_offset(cpu: &mut CPUState) -> target_ptr_t {
-    let lstar = env(cpu).lstar as target_ptr_t;
+    let lstar = unsafe { panda_get_lstar(cpu as *const CPUState) } as target_ptr_t;
     if lstar == 0 {
         return 0;
     }
+    // base = LSTAR - rva(syscall entry). Requires the loaded ISF's symbol RVAs to
+    // match this exact ntoskrnl build (LSTAR points at KiSystemCall64Shadow under
+    // KPTI, else KiSystemCall64). NOTE: a mismatched ISF (struct offsets stable but
+    // symbol addresses shifted) makes this — and every other symbol-addressed
+    // global, e.g. PsActiveProcessHead — resolve wrong; KPCR-based queries
+    // (current process/thread) still work since they use only struct offsets.
     for entry in ["KiSystemCall64Shadow", "KiSystemCall64"] {
         if let Some(rva) = sym_rva(entry) {
             let rva = rva as target_ptr_t;
@@ -192,8 +197,8 @@ fn sym_addr(base: target_ptr_t, name: &str) -> Option<target_ptr_t> {
 
 /// Get the KPCR for the current CPU (mirrors wintrospection's get_kpcr_amd64).
 pub fn get_kpcr(cpu: &mut CPUState) -> target_ptr_t {
-    let kgs = env(cpu).kernelgsbase as target_ptr_t;
-    let gsb = env(cpu).segs[R_GS].base as target_ptr_t;
+    let kgs = unsafe { panda_get_kernel_gs_base(cpu as *const CPUState) } as target_ptr_t;
+    let gsb = unsafe { panda_get_gs_base(cpu as *const CPUState) } as target_ptr_t;
     let self_off = foff("_KPCR", "Self").unwrap_or(0x18);
     if let Some(s) = rd_u64(cpu, kgs + self_off) {
         if s == kgs as u64 {
